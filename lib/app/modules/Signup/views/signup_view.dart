@@ -41,7 +41,43 @@ class SignupView extends StatelessWidget {
               onTap: controller.pickDocPhoto,
             ),
             SizedBox(height: 20.h),
-
+              TextField(
+              controller: controller.phoneController,
+              keyboardType: TextInputType.name,
+              decoration: InputDecoration(
+                labelText: "Full Name",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                prefixIcon: Icon(Icons.person, color: Colors.teal, size: 22.sp),
+              ),
+            ),
+            SizedBox(height: 20.h,),
+              TextField(
+              controller: controller.phoneController,
+              keyboardType: TextInputType.name,
+              decoration: InputDecoration(
+                labelText: "Email",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                prefixIcon: Icon(Icons.email, color: Colors.teal, size: 22.sp),
+              ),
+            ),
+                SizedBox(height: 20.h,),
+              TextField(
+              controller: controller.phoneController,
+              keyboardType: TextInputType.name,
+              decoration: InputDecoration(
+                labelText: "Password",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                prefixIcon: Icon(Icons.password, color: Colors.teal, size: 22.sp),
+            suffixIcon: Icon(Icons.visibility_rounded)
+              ),
+            ),
+            SizedBox(height: 20.h,),
             TextField(
               controller: controller.phoneController,
               keyboardType: TextInputType.phone,
@@ -99,7 +135,7 @@ class SignupView extends StatelessWidget {
       () => GestureDetector(
         onTap: onTap,
         child: Container(
-          height: 120.h,
+          height: 100.h,
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12.r),
@@ -109,7 +145,7 @@ class SignupView extends StatelessWidget {
           child: imagePath.value.isEmpty
               ? Center(
                   child: Text(label,
-                      style: TextStyle(fontSize: 14.sp, color: Colors.teal)),
+                      style: TextStyle(fontSize: 14.sp, color: Colors.teal),),
                 )
               : ClipRRect(
                   borderRadius: BorderRadius.circular(12.r),

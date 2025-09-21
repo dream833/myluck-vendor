@@ -1,11 +1,14 @@
-import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SignupController extends GetxController {
+  final fullname = TextEditingController();
+  final email =TextEditingController();
   final phoneController = TextEditingController();
   final referralController = TextEditingController();
+  var ispwvisible =true.obs;
 
   final selfPhoto = "".obs;
   final shopPhoto = "".obs;
