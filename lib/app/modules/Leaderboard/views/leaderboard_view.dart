@@ -24,7 +24,7 @@ class LeaderboardView extends StatelessWidget {
           children: [
             // Month Selector
             Obx(() => DropdownButtonFormField<String>(
-                  value: controller.selectedMonth.value,
+                  initialValue: controller.selectedMonth.value,
                   decoration: InputDecoration(
                     labelText: "Select Month",
                     border: OutlineInputBorder(

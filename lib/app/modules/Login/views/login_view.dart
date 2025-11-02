@@ -31,7 +31,7 @@ class LoginView extends StatelessWidget {
               ),
               SizedBox(height: 30.h),
               TextField(
-                controller: controller.phoneController,
+                controller: controller.emailController,
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
                   labelText: "Mobile Number",

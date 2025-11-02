@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,7 +15,10 @@ class SignupView extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.teal,
-        title: Text("Sign Up", style: TextStyle(fontSize: 18.sp, color: Colors.white)),
+        title: Text(
+          "Sign Up",
+          style: TextStyle(fontSize: 18.sp, color: Colors.white),
+        ),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20.w),
@@ -41,67 +43,95 @@ class SignupView extends StatelessWidget {
               onTap: controller.pickDocPhoto,
             ),
             SizedBox(height: 20.h),
-              TextField(
-              controller: controller.phoneController,
-              keyboardType: TextInputType.name,
-              decoration: InputDecoration(
-                labelText: "Full Name",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
-                prefixIcon: Icon(Icons.person, color: Colors.teal, size: 22.sp),
-              ),
+
+            _textField(
+              label: "Full Name",
+              icon: Icons.person,
+              controller: controller.fullname,
             ),
-            SizedBox(height: 20.h,),
-              TextField(
-              controller: controller.phoneController,
-              keyboardType: TextInputType.name,
-              decoration: InputDecoration(
-                labelText: "Email",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
-                prefixIcon: Icon(Icons.email, color: Colors.teal, size: 22.sp),
-              ),
+            SizedBox(height: 20.h),
+
+            _textField(
+              label: "Email",
+              icon: Icons.email,
+              controller: controller.email,
+              keyboardType: TextInputType.emailAddress,
             ),
-                SizedBox(height: 20.h,),
-              TextField(
-              controller: controller.phoneController,
-              keyboardType: TextInputType.name,
-              decoration: InputDecoration(
-                labelText: "Password",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
-                prefixIcon: Icon(Icons.password, color: Colors.teal, size: 22.sp),
-            suffixIcon: Icon(Icons.visibility_rounded)
-              ),
-            ),
-            SizedBox(height: 20.h,),
-            TextField(
+            SizedBox(height: 20.h),
+
+            _textField(
+              label: "Mobile Number",
+              icon: Icons.phone,
               controller: controller.phoneController,
               keyboardType: TextInputType.phone,
-              decoration: InputDecoration(
-                labelText: "Mobile Number",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
+            ),
+            SizedBox(height: 20.h),
+
+            Obx(
+              () => TextField(
+                controller: controller.passwordController,
+                obscureText: !controller.ispwvisible.value,
+                decoration: InputDecoration(
+                  labelText: "Password",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  prefixIcon: Icon(Icons.lock, color: Colors.teal, size: 22.sp),
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      controller.ispwvisible.value =
+                          !controller.ispwvisible.value;
+                    },
+                    icon: Icon(
+                      controller.ispwvisible.value
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Colors.teal,
+                    ),
+                  ),
                 ),
-                prefixIcon: Icon(Icons.phone, color: Colors.teal, size: 22.sp),
               ),
+            ),
+            SizedBox(height: 20.h),
+
+            _textField(
+              label: "Shop Name",
+              icon: Icons.store,
+              controller: controller.shopNameController,
+            ),
+            SizedBox(height: 20.h),
+
+            SizedBox(height: 20.h),
+
+            Obx(
+              () => DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  labelText: "Select Shop Category",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  prefixIcon: Icon(Icons.category, color: Colors.teal),
+                ),
+                initialValue: controller.selectedCategory.value,
+                items: controller.categories.map((category) {
+                  return DropdownMenuItem<String>(
+                    value: category['id'],
+                    child: Text(category['name']!),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  controller.selectedCategory.value = value;
+                },
+              ),
+            ),
+            SizedBox(height: 10.h),
+            _textField(
+              label: "Address",
+              icon: Icons.location_on,
+              controller: controller.addressController,
+              maxLines: 2,
             ),
             SizedBox(height: 15.h),
-
-            TextField(
-              controller: controller.referralController,
-              decoration: InputDecoration(
-                labelText: "Sales Team Code / Referral",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
-                prefixIcon: Icon(Icons.code, color: Colors.teal, size: 22.sp),
-              ),
-            ),
-            SizedBox(height: 25.h),
 
             SizedBox(
               width: double.infinity,
@@ -126,6 +156,25 @@ class SignupView extends StatelessWidget {
     );
   }
 
+  Widget _textField({
+    required String label,
+    required IconData icon,
+    required TextEditingController controller,
+    TextInputType keyboardType = TextInputType.text,
+    int maxLines = 1,
+  }) {
+    return TextField(
+      controller: controller,
+      keyboardType: keyboardType,
+      maxLines: maxLines,
+      decoration: InputDecoration(
+        labelText: label,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r)),
+        prefixIcon: Icon(icon, color: Colors.teal, size: 22.sp),
+      ),
+    );
+  }
+
   Widget _imagePicker({
     required String label,
     required RxString imagePath,
@@ -144,8 +193,10 @@ class SignupView extends StatelessWidget {
           ),
           child: imagePath.value.isEmpty
               ? Center(
-                  child: Text(label,
-                      style: TextStyle(fontSize: 14.sp, color: Colors.teal),),
+                  child: Text(
+                    label,
+                    style: TextStyle(fontSize: 14.sp, color: Colors.teal),
+                  ),
                 )
               : ClipRRect(
                   borderRadius: BorderRadius.circular(12.r),
