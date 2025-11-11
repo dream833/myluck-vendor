@@ -1,4 +1,4 @@
-package com.example.rewardvendor
+package com.dream.myluckvendor
 
 import io.flutter.embedding.android.FlutterActivity
 

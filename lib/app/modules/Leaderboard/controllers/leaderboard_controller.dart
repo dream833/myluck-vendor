@@ -1,31 +1,54 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rewardvendor/app/data/function/mydio.dart';
 
 class LeaderboardController extends GetxController {
-  var months = ["January", "February", "March", "April"].obs;
-  var selectedMonth = "January".obs;
-
   var leaderboard = <Map<String, dynamic>>[].obs;
+  var isLoading = false.obs;
 
   @override
   void onInit() {
     super.onInit();
-    loadLeaderboard();
+    fetchLeaderboard();
   }
 
-  void loadLeaderboard() {
-    // Dummy data (normally API call here)
-    leaderboard.value = List.generate(10, (index) {
-      return {
-        "rank": index + 1,
-        "shopkeeper": "Shopkeeper ${index + 1}",
-        "likes": (100 - index * 5),
-        "coins": (500 - index * 20),
-      };
-    });
-  }
+  Future<void> fetchLeaderboard() async {
+    try {
+      isLoading(true);
 
-  void changeMonth(String month) {
-    selectedMonth.value = month;
-    loadLeaderboard(); 
+      final response = await dioGet("leadboard-store-list");
+
+      if (response.statusCode == 200 &&
+          response.data != null &&
+          response.data["data"] != null) {
+        final List data = response.data["data"];
+
+        leaderboard.assignAll(
+          data.map((item) {
+            return {
+              "shop_name": item["shop_name"] ?? "Unknown",
+              "likes": item["total_likes"] ?? 0,
+              "coins": item["total_coins"] ?? 0,
+              "stars": item["total_stars"] ?? 0,
+            };
+          }).toList(),
+        );
+
+        // 🔹 Sort by coins (descending order)
+        leaderboard.sort((a, b) => b["coins"].compareTo(a["coins"]));
+      } else {
+        leaderboard.clear();
+      }
+    } catch (e) {
+      debugPrint("❌ Leaderboard fetch error: $e");
+      Get.snackbar(
+        "Error",
+        "Failed to load leaderboard: $e",
+        backgroundColor: const Color(0xFFE57373),
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading(false);
+    }
   }
 }

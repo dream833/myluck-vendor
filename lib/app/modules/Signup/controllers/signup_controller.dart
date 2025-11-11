@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +15,7 @@ class SignupController extends GetxController {
   final referralController = TextEditingController();
 
   var ispwvisible = true.obs;
+  var isLoading = false.obs;
 
   final selfPhoto = "".obs;
   final shopPhoto = "".obs;
@@ -37,7 +37,6 @@ class SignupController extends GetxController {
     loadCategories();
   }
 
-  // ✅ Load Shop Categories from API
   Future<void> loadCategories() async {
     try {
       final res = await dioGet("store-category-list");
@@ -115,35 +114,31 @@ class SignupController extends GetxController {
   Future<void> getCurrentLocation() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
       Get.snackbar("Error", "Please enable location services");
       return;
     }
 
     LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
       permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        Get.snackbar("Error", "Location permission denied");
-        return;
-      }
     }
 
-    if (permission == LocationPermission.deniedForever) {
-      Get.snackbar(
-        "Error",
-        "Location permissions permanently denied. Enable them in settings.",
-      );
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      Get.snackbar("Error", "Location permission denied");
       return;
     }
 
     final pos = await Geolocator.getCurrentPosition(
-      locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
+      desiredAccuracy: LocationAccuracy.high,
     );
     lat.value = pos.latitude;
     lng.value = pos.longitude;
+    debugPrint("✅ Location: ${lat.value}, ${lng.value}");
   }
 
-  // ✅ Register function
   Future<void> register() async {
     if (fullname.text.isEmpty ||
         email.text.isEmpty ||
@@ -154,6 +149,7 @@ class SignupController extends GetxController {
         selfPhoto.value.isEmpty ||
         shopPhoto.value.isEmpty ||
         docPhoto.value.isEmpty ||
+        referralController.text.isEmpty ||
         selectedCategory.value == null) {
       Get.snackbar(
         "Error",
@@ -182,6 +178,7 @@ class SignupController extends GetxController {
         "latitude": lat.value.toString(),
         "longitude": lng.value.toString(),
         "shop_category": selectedCategory.value,
+        "referral_code": referralController.text,
         "registration_document": await dio.MultipartFile.fromFile(
           docPhoto.value,
           filename: "doc_${DateTime.now().millisecondsSinceEpoch}.jpg",

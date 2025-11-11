@@ -1,50 +1,39 @@
-import 'dart:math';
 import 'package:get/get.dart';
 
+import 'package:rewardvendor/app/data/function/mydio.dart';
+
 class TransactionController extends GetxController {
-  var months = ["January", "February", "March", "April"].obs;
-  var selectedMonth = "January".obs;
+  var isLoading = false.obs;
+  var transactions = [].obs; // store all transaction data
+  var message = ''.obs;
 
-  var transactions = <Map<String, dynamic>>[].obs;
-  var filteredTransactions = <Map<String, dynamic>>[].obs;
+  // fetch transactions for given shopkeeper
+  Future<void> fetchTransactions({
+    required String shopId,
+    String? month,
+    String? year,
+  }) async {
+    isLoading.value = true;
+    message.value = '';
 
-  @override
-  void onInit() {
-    super.onInit();
-    addCustomer("Customer 1", "January");
-    addCustomer("Customer 2", "January");
-    addCustomer("Customer 3", "February");
-    filterByMonth();
-  }
-
-  void addCustomer(String name, String month) {
-    transactions.add({
-      "customer": name,
-      "bill": 0,
-      "coins": 0,
-      "stars": 0,
-      "month": month,
-    });
-    filterByMonth();
-  }
-
-  void filterByMonth() {
-    filteredTransactions.value = transactions
-        .where((txn) => txn["month"] == selectedMonth.value)
-        .toList();
-  }
-
-  /// Reward assign with code generation
-  String assignReward(int index, String type, int value) {
-    final txn = filteredTransactions[index];
-    txn[type == "coin" ? "coins" : "stars"] += value;
-    filteredTransactions.refresh();
-
-    // simple random code generator
-    String code = "${type.toUpperCase()}-${Random().nextInt(999999)}";
-
-    Get.snackbar("Code Generated", "Share this code: $code");
-
-    return code;
+    try {
+      final response = await dioPost(
+        endUrl: 'shopkeeper/transaction',
+        data: {"shop_id": shopId, "month": month ?? "", "year": year ?? ""},
+      );
+      var data = response.data;
+      if (data['status'] == 200) {
+        transactions.value = data['data'];
+        message.value = data['message'] ?? 'Record Found';
+      } else {
+        message.value = data['message'] ?? 'No Record Found';
+        transactions.clear();
+      }
+    } catch (e) {
+      message.value = "Error: $e";
+      transactions.clear();
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

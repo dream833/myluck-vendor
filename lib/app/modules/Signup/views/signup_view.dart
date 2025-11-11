@@ -101,8 +101,6 @@ class SignupView extends StatelessWidget {
             ),
             SizedBox(height: 20.h),
 
-            SizedBox(height: 20.h),
-
             Obx(
               () => DropdownButtonFormField<String>(
                 decoration: InputDecoration(
@@ -129,24 +127,51 @@ class SignupView extends StatelessWidget {
               label: "Address",
               icon: Icons.location_on,
               controller: controller.addressController,
-              maxLines: 2,
+              // maxLines: 1,
+            ),
+            SizedBox(height: 20.h),
+            _textField(
+              label: "Referral Code or Sales Code",
+              icon: Icons.inventory_outlined,
+              controller: controller.referralController,
             ),
             SizedBox(height: 15.h),
 
-            SizedBox(
-              width: double.infinity,
-              height: 50.h,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r),
+            Obx(
+              () => SizedBox(
+                width: double.infinity,
+                height: 50.h,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.teal,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
                   ),
-                ),
-                onPressed: controller.register,
-                child: Text(
-                  "Register",
-                  style: TextStyle(fontSize: 18.sp, color: Colors.white),
+                  onPressed: controller.isLoading.value
+                      ? null
+                      : () async {
+                          controller.isLoading.value = true;
+                          await controller.register();
+                          controller.isLoading.value = false;
+                        },
+                  child: controller.isLoading.value
+                      ? SizedBox(
+                          width: 24.w,
+                          height: 24.w,
+                          child: const CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2.8,
+                          ),
+                        )
+                      : Text(
+                          "Register",
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                 ),
               ),
             ),

@@ -9,6 +9,14 @@ abstract class Routes {
   static const BOTTOM_NAVIGATION_BAR = _Paths.BOTTOM_NAVIGATION_BAR;
   static const TRANSACTION = _Paths.TRANSACTION;
   static const LEADERBOARD = _Paths.LEADERBOARD;
+  static const PROFILE = _Paths.PROFILE;
+  static const ASSIGN_POINT = _Paths.ASSIGN_POINT;
+  static const QRSCANNERPAGE = _Paths.QRSCANNERPAGE;
+  static const EDIT_PROFILE = _Paths.EDIT_PROFILE;
+  static const WALLETBALANCE = _Paths.WALLETBALANCE;
+  static const WALLETPACKAGEVIEW = _Paths.WALLETPACKAGEVIEW;
+  static const DUEDETAILS = _Paths.DUEDETAILS;
+  static const OWN_PURCHASE_HISTORY = _Paths.OWN_PURCHASE_HISTORY;
 }
 
 abstract class _Paths {
@@ -19,4 +27,12 @@ abstract class _Paths {
   static const BOTTOM_NAVIGATION_BAR = '/bottom-navigation-bar';
   static const TRANSACTION = '/transaction';
   static const LEADERBOARD = '/leaderboard';
+  static const PROFILE = '/profile';
+  static const ASSIGN_POINT = '/assign-point';
+  static const QRSCANNERPAGE = '/qrscannerpage';
+  static const EDIT_PROFILE = '/edit-profile';
+  static const WALLETBALANCE = '/walletbalance';
+  static const WALLETPACKAGEVIEW = '/walletpackageview';
+  static const DUEDETAILS = '/duedetails';
+  static const OWN_PURCHASE_HISTORY = '/own-purchase-history';
 }

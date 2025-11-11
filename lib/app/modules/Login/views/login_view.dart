@@ -30,18 +30,26 @@ class LoginView extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 30.h),
+
+              /// Email / Mobile field
               TextField(
                 controller: controller.emailController,
-                keyboardType: TextInputType.phone,
+                keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-                  labelText: "Mobile Number",
+                  labelText: "Mobile Number Or Email ",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.r),
                   ),
-                  prefixIcon: Icon(Icons.phone, color: Colors.teal, size: 22.sp),
+                  prefixIcon: Icon(
+                    Icons.phone,
+                    color: Colors.teal,
+                    size: 22.sp,
+                  ),
                 ),
               ),
               SizedBox(height: 15.h),
+
+              /// Password field
               TextField(
                 controller: controller.passwordController,
                 obscureText: true,
@@ -54,24 +62,52 @@ class LoginView extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20.h),
-              SizedBox(
-                width: double.infinity,
-                height: 50.h,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.teal,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.r),
+
+              /// ✅ Login button (with loading + one click only)
+              Obx(
+                () => SizedBox(
+                  width: double.infinity,
+                  height: 50.h,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.teal,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
                     ),
-                  ),
-                  onPressed: controller.login,
-                  child: Text(
-                    "Login",
-                    style: TextStyle(fontSize: 18.sp, color: Colors.white),
+                    // 👉 onPressed must be a function (not widget)
+                    onPressed: controller.isLoading.value
+                        ? null // disable button when loading
+                        : () async {
+                            controller.isLoading.value = true;
+                            await controller.login();
+                            controller.isLoading.value = false;
+                          },
+
+                    // 👉 child determines what’s shown inside button
+                    child: controller.isLoading.value
+                        ? SizedBox(
+                            width: 24.w,
+                            height: 24.w,
+                            child: const CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2.8,
+                            ),
+                          )
+                        : Text(
+                            "Login",
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
                   ),
                 ),
               ),
               SizedBox(height: 15.h),
+
+              /// Sign up text
               Center(
                 child: TextButton(
                   onPressed: () {

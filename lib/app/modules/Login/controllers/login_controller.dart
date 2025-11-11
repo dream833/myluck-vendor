@@ -4,10 +4,15 @@ import 'package:rewardvendor/app/data/config/app_config.dart';
 import 'package:rewardvendor/app/data/function/mydio.dart';
 
 class LoginController extends GetxController {
-  final emailController = TextEditingController(text: 'sura120@gmail.com');
+  final emailController = TextEditingController(text: 'kalipada1800@gmail.com');
   final passwordController = TextEditingController(text: '123456');
 
   var isLoading = false.obs;
+
+  // 🔹 Coins, Stars, Total Balance
+  var coins = 0.obs;
+  var stars = 0.obs;
+  var totalBalance = 0.obs;
 
   Future<void> login() async {
     final email = emailController.text.trim();
@@ -35,11 +40,25 @@ class LoginController extends GetxController {
 
       if (data['status'] == 200) {
         final token = data['access_token'];
+        final user = data['data'];
 
+        // 🔹 Save user info in GetStorage
         getBox.write(USER_TOKEN, token);
-        getBox.write(USER_ID, data['data']['id']);
-        getBox.write(USER_EMAIL, data['data']['email']);
+        getBox.write(IS_USER_LOGGED_IN, true);
+        getBox.write(USER_ID, user['id']);
+        getBox.write(USER_EMAIL, user['email']);
+
         getBox.write(USER_LOGIN, true);
+
+        // 🔹 Save coins and stars from API if available
+        coins.value = user['coin'] ?? 0;
+        stars.value = user['star'] ?? 0;
+        totalBalance.value = coins.value + stars.value;
+
+        print("✅ USER_ID: ${user['id']}");
+        print("✅ EMAIL: ${user['email']}");
+        print("✅ TOKEN: $token");
+        print("✅ Coins: ${coins.value}, Stars: ${stars.value}");
 
         Get.snackbar(
           "Success",
@@ -48,6 +67,7 @@ class LoginController extends GetxController {
           colorText: Colors.white,
         );
 
+        // 🔹 Navigate to Home / Bottom Navigation
         Get.offAllNamed('/bottom-navigation-bar');
       } else {
         Get.snackbar(
@@ -60,7 +80,7 @@ class LoginController extends GetxController {
     } catch (e) {
       Get.snackbar(
         "Error",
-        "Something went wrong",
+        "Something went wrong: $e",
         backgroundColor: Colors.redAccent,
         colorText: Colors.white,
       );

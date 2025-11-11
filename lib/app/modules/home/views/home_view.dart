@@ -20,11 +20,14 @@ class HomeView extends StatelessWidget {
           children: [
             Icon(Icons.storefront, color: Colors.white, size: 26.sp),
             SizedBox(width: 10.w),
-            Text("Dashboard",
-                style: TextStyle(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white)),
+            Text(
+              "Dashboard",
+              style: TextStyle(
+                fontSize: 20.sp,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
           ],
         ),
         actions: [
@@ -41,30 +44,30 @@ class HomeView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Transaction Management
+            // 🔹 Transaction Management
             _buildSectionHeader("Transaction Management"),
             Row(
               children: [
                 _buildCard(
-                  title: "View Transactions",
+                  title: "Wallet-Balance",
                   icon: Icons.receipt_long,
-                  onTap: () => Get.toNamed("/transaction"),
+                  onTap: () => Get.toNamed("/walletbalance"),
                   color1: Colors.teal,
                   color2: Colors.teal.shade400,
                 ),
                 SizedBox(width: 12.w),
                 _buildCard(
-                  title: "Assign Points",
+                  title: "Assign-Points",
                   icon: Icons.add_task,
-                  onTap: () => Get.toNamed("/transaction"),
+                  onTap: () => Get.toNamed("/assign-point"),
                   color1: Colors.orange,
                   color2: Colors.deepOrange,
                 ),
               ],
             ),
-            SizedBox(height: 22.h),
+            SizedBox(height: 50.h),
 
-            // Recognition & Competition
+            // 🔹 Recognition & Competition
             _buildSectionHeader("Recognition & Competition"),
             Row(
               children: [
@@ -85,63 +88,125 @@ class HomeView extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 22.h),
+            SizedBox(height: 55.h),
 
-            // First-Time Purchase
-            _buildSectionHeader("First-Time Purchase Policy"),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(16.w),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14.r),
-                gradient: LinearGradient(
-                  colors: [Colors.teal.shade50, Colors.white],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                border: Border.all(color: Colors.teal.shade200),
-              ),
-              child: Obx(() => Text(
-                    controller.firstTimeStatus.value,
-                    style: TextStyle(
-                        fontSize: 14.sp,
-                        color: Colors.black87,
-                        fontWeight: FontWeight.w500),
-                  )),
-            ),
-            SizedBox(height: 22.h),
-
-            // Monthly Credit Status
             _buildSectionHeader("Monthly Credit Status"),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(16.w),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14.r),
-                gradient: LinearGradient(
-                  colors: [Colors.teal.shade50, Colors.white],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+
+            Obx(
+              () => RefreshIndicator(
+                color: Colors.teal,
+                onRefresh: () async {
+                  await controller.fetchCreditData();
+                },
+                child: ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(16.w),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14.r),
+                        gradient: LinearGradient(
+                          colors: [Colors.teal.shade100, Colors.white],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        border: Border.all(color: Colors.teal.shade300),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.teal.shade100.withOpacity(0.4),
+                            blurRadius: 6,
+                            offset: const Offset(2, 3),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          /// 🟢 Left side info
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Credit Balance",
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  color: Colors.grey[700],
+                                ),
+                              ),
+                              SizedBox(height: 4.h),
+                              Text(
+                                "₹${controller.creditBalance.value}",
+                                style: TextStyle(
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.teal.shade700,
+                                ),
+                              ),
+                              SizedBox(height: 8.h),
+                              Text(
+                                controller.unpaidCredits.value > 0
+                                    ? "Unpaid: ${controller.unpaidCredits.value}"
+                                    : "No Pending Dues",
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: controller.unpaidCredits.value > 0
+                                      ? Colors.red
+                                      : Colors.green,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed('/duedetails');
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 10.w,
+                                vertical: 6.h,
+                              ),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.teal.shade700,
+                                    Colors.teal.shade400,
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "View Details",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 13.sp,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  SizedBox(width: 4.w),
+                                  Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 14.sp,
+                                    color: Colors.white,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                border: Border.all(color: Colors.teal.shade200),
               ),
-              child: Obx(() => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Credit Balance: ₹${controller.creditBalance.value}",
-                          style: TextStyle(
-                              fontSize: 14.sp, fontWeight: FontWeight.w600)),
-                      SizedBox(height: 6.h),
-                      Text("Unpaid Credits: ₹${controller.unpaidCredits.value}",
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w600,
-                            color: controller.unpaidCredits.value > 0
-                                ? Colors.red
-                                : Colors.green,
-                          )),
-                    ],
-                  )),
             ),
           ],
         ),
@@ -149,28 +214,29 @@ class HomeView extends StatelessWidget {
     );
   }
 
+  /// 🧱 Section Header Widget
   Widget _buildSectionHeader(String title) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.h),
       child: Row(
         children: [
           Expanded(
-            child: Text(title,
-                style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87)),
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
           ),
-          Container(
-            height: 2,
-            width: 60.w,
-            color: Colors.teal,
-          )
+          Container(height: 2, width: 60.w, color: Colors.teal),
         ],
       ),
     );
   }
 
+  /// 🧱 Reusable Dashboard Card
   Widget _buildCard({
     required String title,
     required IconData icon,
@@ -192,11 +258,10 @@ class HomeView extends StatelessWidget {
             borderRadius: BorderRadius.circular(16.r),
             boxShadow: [
               BoxShadow(
-                // ignore: deprecated_member_use
                 color: color1.withOpacity(0.4),
                 blurRadius: 6,
                 offset: const Offset(2, 4),
-              )
+              ),
             ],
           ),
           child: Column(
@@ -214,9 +279,10 @@ class HomeView extends StatelessWidget {
                   title,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white),
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ],
