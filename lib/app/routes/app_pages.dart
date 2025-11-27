@@ -16,6 +16,8 @@ import '../modules/Transaction/bindings/transaction_binding.dart';
 import '../modules/Transaction/views/transaction_view.dart';
 import '../modules/assign_point/bindings/assign_point_binding.dart';
 import '../modules/assign_point/views/assign_point_view.dart';
+import '../modules/commissionwallet/bindings/commissionwallet_binding.dart';
+import '../modules/commissionwallet/views/commissionwallet_view.dart';
 import '../modules/duedetails/bindings/duedetails_binding.dart';
 import '../modules/duedetails/views/duedetails_view.dart';
 import '../modules/edit_profile/bindings/edit_profile_binding.dart';
@@ -106,6 +108,11 @@ class AppPages {
       name: _Paths.OWN_PURCHASE_HISTORY,
       page: () => const OwnPurchaseHistoryView(),
       binding: OwnPurchaseHistoryBinding(),
+    ),
+    GetPage(
+      name: _Paths.COMMISSIONWALLET,
+      page: () => const CommissionwalletView(),
+      binding: CommissionwalletBinding(),
     ),
   ];
 }

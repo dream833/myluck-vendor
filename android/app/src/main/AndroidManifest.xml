@@ -13,7 +13,7 @@
     <!-- Android 13+ er jonne media access -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <application
-        android:label="rewardvendor"
+        android:label="MyLuck Vendor"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 

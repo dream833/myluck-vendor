@@ -53,13 +53,13 @@ class EditProfileController extends GetxController {
       if (response.statusCode == 200 && response.data["data"] != null) {
         final data = response.data["data"];
 
-        name.value = data["name"] ?? "";
-        shopName.value = data["shop_name"] ?? "";
-        email.value = data["email"] ?? "";
-        phone.value = data["mobile_no"] ?? "";
-        address.value = data["address"] ?? "";
-        selfPhoto.value = data["self_photo"] ?? "";
-        shopPhoto.value = data["shop_photo"] ?? "";
+        name(data["name"] ?? "");
+        shopName(data["shop_name"] ?? "");
+        email(data["email"] ?? "");
+        phone(data["mobile_no"] ?? "");
+        address(data["address"] ?? "");
+        selfPhoto(data["self_photo"] ?? "");
+        shopPhoto(data["shop_photo"] ?? "");
 
         print("✅ Profile loaded successfully: ${name.value}");
       } else {

@@ -26,15 +26,39 @@ class WalletpackageviewController extends GetxController {
   Future<void> fetchPackages() async {
     try {
       isLoading(true);
-      final response = await dioGet("shopkeeper/rechage-package");
 
-      if (response.statusCode == 200 && response.data["data"] != null) {
-        packages.value = response.data["data"];
-        print("✅ Loaded ${packages.length} packages");
+      final response = await dioPost(
+        endUrl: "shopkeeper/rechage-package",
+        // data: {"shop_id": "5"},
+        data: {"shop_id": getBox.read(USER_ID)},
+      );
+
+      // Check response
+      if (response.statusCode == 200) {
+        var data = response.data["data"];
+        var message = response.data["message"] ?? "No message";
+
+        if (data != null) {
+          packages.value = data;
+          print("✅ Loaded ${packages.length} packages");
+          // Get.snackbar(
+          //   "Success",
+          //   message,
+          //   backgroundColor: Colors.green,
+          //   colorText: Colors.white,
+          // );
+        } else {
+          Get.snackbar(
+            "Info",
+            message,
+            backgroundColor: Colors.orange,
+            colorText: Colors.white,
+          );
+        }
       } else {
         Get.snackbar(
           "Error",
-          "No packages found",
+          response.data["message"] ?? "Failed to fetch packages",
           backgroundColor: Colors.redAccent,
           colorText: Colors.white,
         );

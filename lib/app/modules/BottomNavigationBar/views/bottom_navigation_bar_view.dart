@@ -17,7 +17,7 @@ class BottomNavigationBarView extends StatelessWidget {
 
   final List<BottomNavigationBarItem> items = [
     BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
-    BottomNavigationBarItem(icon: Icon(Icons.redeem), label: 'Transactions'),
+    BottomNavigationBarItem(icon: Icon(Icons.redeem), label: 'Transaction'),
     // BottomNavigationBarItem(
     //   icon: Icon(Icons.storefront_outlined),
     //   label: 'Orders',

@@ -37,6 +37,13 @@ class HomeView extends StatelessWidget {
             },
             icon: Icon(Icons.person, size: 26.sp, color: Colors.white),
           ),
+          //notification
+          IconButton(
+            onPressed: () {
+              Get.toNamed("/notifications");
+            },
+            icon: Icon(Icons.notifications, size: 26.sp, color: Colors.white),
+          ),
         ],
       ),
       body: SingleChildScrollView(

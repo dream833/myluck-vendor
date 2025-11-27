@@ -34,8 +34,7 @@ class LeaderboardController extends GetxController {
           }).toList(),
         );
 
-        // 🔹 Sort by coins (descending order)
-        leaderboard.sort((a, b) => b["coins"].compareTo(a["coins"]));
+        leaderboard.sort((a, b) => b["likes"].compareTo(a["likes"]));
       } else {
         leaderboard.clear();
       }

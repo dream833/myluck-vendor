@@ -17,6 +17,7 @@ abstract class Routes {
   static const WALLETPACKAGEVIEW = _Paths.WALLETPACKAGEVIEW;
   static const DUEDETAILS = _Paths.DUEDETAILS;
   static const OWN_PURCHASE_HISTORY = _Paths.OWN_PURCHASE_HISTORY;
+  static const COMMISSIONWALLET = _Paths.COMMISSIONWALLET;
 }
 
 abstract class _Paths {
@@ -35,4 +36,5 @@ abstract class _Paths {
   static const WALLETPACKAGEVIEW = '/walletpackageview';
   static const DUEDETAILS = '/duedetails';
   static const OWN_PURCHASE_HISTORY = '/own-purchase-history';
+  static const COMMISSIONWALLET = '/commissionwallet';
 }

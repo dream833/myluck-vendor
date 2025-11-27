@@ -7,6 +7,8 @@ class AssignPointController extends GetxController {
   final TextEditingController searchController = TextEditingController();
   final TextEditingController starController = TextEditingController();
   final TextEditingController coinController = TextEditingController();
+  final TextEditingController shoppingprice = TextEditingController();
+  var proddescription = TextEditingController();
 
   var isLoading = false.obs;
   var isCustomerLoaded = false.obs;
@@ -64,6 +66,8 @@ class AssignPointController extends GetxController {
         "customer_id": customerData['id'],
         "star": star,
         "coin": coin,
+        "shoping_price": shoppingprice.text.trim(),
+        "shoping_details": proddescription.text.trim(),
       };
 
       final res = await dioPost(endUrl: 'shopkeeper/assign-reward', data: data);

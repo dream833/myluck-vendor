@@ -23,6 +23,11 @@ class ProfileView extends StatelessWidget {
         'route': '/own-purchase-history',
       },
       {
+        'icon': Icons.account_balance_wallet,
+        'title': 'Commission Wallet',
+        'route': '/commissionwallet',
+      },
+      {
         'icon': Icons.security,
         'title': 'Terms & Conditions',
         'route': '/terms',
@@ -191,6 +196,9 @@ class ProfileView extends StatelessWidget {
         break;
       case '/own-purchase-history':
         Get.toNamed('/own-purchase-history');
+        break;
+      case '/commissionwallet':
+        Get.toNamed('/commissionwallet');
         break;
       case '/terms':
         Get.toNamed('/terms');

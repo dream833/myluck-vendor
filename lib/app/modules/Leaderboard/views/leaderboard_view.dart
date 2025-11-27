@@ -122,7 +122,6 @@ class LeaderboardView extends StatelessWidget {
     );
   }
 
-  // 🔹 Normal Cell (Row Content)
   Widget _buildCell(
     String text, {
     int flex = 1,

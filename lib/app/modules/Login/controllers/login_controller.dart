@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewardvendor/app/data/config/app_config.dart';
 import 'package:rewardvendor/app/data/function/mydio.dart';
+import 'package:rewardvendor/app/modules/edit_profile/controllers/edit_profile_controller.dart';
 
 class LoginController extends GetxController {
-  final emailController = TextEditingController(text: 'kalipada1800@gmail.com');
-  final passwordController = TextEditingController(text: '123456');
+  final emailController = TextEditingController(text: 'vendor1800@gmail.com');
+  final passwordController = TextEditingController(text: '12345');
 
   var isLoading = false.obs;
 
@@ -59,7 +60,7 @@ class LoginController extends GetxController {
         print("✅ EMAIL: ${user['email']}");
         print("✅ TOKEN: $token");
         print("✅ Coins: ${coins.value}, Stars: ${stars.value}");
-
+        await Get.find<EditProfileController>().fetchProfile();
         Get.snackbar(
           "Success",
           data['message'] ?? "Login Successful",

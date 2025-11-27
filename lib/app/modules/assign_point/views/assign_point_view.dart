@@ -169,7 +169,43 @@ class AssignPointView extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20.h),
+              TextField(
+                controller: controller.shoppingprice,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: "Enter Shopping Price",
+                  prefixIcon: const Icon(
+                    Icons.price_check,
+                    color: Colors.orange,
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20.h),
 
+              TextField(
+                controller: controller.proddescription,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  labelText: "Enter Product Description",
+                  prefixIcon: const Icon(
+                    Icons.description,
+                    color: Colors.orange,
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20.h),
               // 🚀 Assign reward button
               Obx(
                 () => SizedBox(

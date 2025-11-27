@@ -44,8 +44,8 @@ class WalletpackageviewView extends GetView<WalletpackageviewController> {
         if (controller.packages.isEmpty) {
           return Center(
             child: Text(
-              "No Packages Available",
-              style: TextStyle(fontSize: 16.sp, color: Colors.grey[700]),
+              "Please Clear Your Outstanding Dues ",
+              style: TextStyle(fontSize: 18.sp, color: Colors.grey[700]),
             ),
           );
         }
