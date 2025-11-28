@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rewardvendor/app/data/config/appcolor.dart';
 import 'package:url_launcher/url_launcher.dart'; // 👈 import added
 import '../controllers/contactus_controller.dart';
 
@@ -12,7 +13,7 @@ class ContactusView extends GetView<ContactusController> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Appcolor.secondary,
         centerTitle: true,
         title: const Text(
           "Contact Us",

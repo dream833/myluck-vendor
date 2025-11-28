@@ -21,6 +21,7 @@ abstract class Routes {
   static const TERMSCONDITION = _Paths.TERMSCONDITION;
   static const PRIVACYPOLICY = _Paths.PRIVACYPOLICY;
   static const CONTACTUS = _Paths.CONTACTUS;
+  static const INVITEUS = _Paths.INVITEUS;
 }
 
 abstract class _Paths {
@@ -43,4 +44,5 @@ abstract class _Paths {
   static const TERMSCONDITION = '/termscondition';
   static const PRIVACYPOLICY = '/privacypolicy';
   static const CONTACTUS = '/contactus';
+  static const INVITEUS = '/inviteus';
 }

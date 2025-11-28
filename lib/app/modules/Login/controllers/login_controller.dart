@@ -50,6 +50,7 @@ class LoginController extends GetxController {
         getBox.write(USER_EMAIL, user['email']);
 
         getBox.write(USER_LOGIN, true);
+        getBox.write(REFERRAL_CODE, user['self_referral_code']);
 
         // 🔹 Save coins and stars from API if available
         coins.value = user['coin'] ?? 0;

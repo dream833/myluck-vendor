@@ -28,6 +28,8 @@ import '../modules/edit_profile/bindings/edit_profile_binding.dart';
 import '../modules/edit_profile/views/edit_profile_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/inviteus/bindings/inviteus_binding.dart';
+import '../modules/inviteus/views/inviteus_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/termscondition/bindings/termscondition_binding.dart';
@@ -134,6 +136,11 @@ class AppPages {
       name: _Paths.CONTACTUS,
       page: () => const ContactusView(),
       binding: ContactusBinding(),
+    ),
+    GetPage(
+      name: _Paths.INVITEUS,
+      page: () => const InviteusView(),
+      binding: InviteusBinding(),
     ),
   ];
 }

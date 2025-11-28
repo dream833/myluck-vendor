@@ -30,17 +30,22 @@ class ProfileView extends StatelessWidget {
       {
         'icon': Icons.security,
         'title': 'Terms & Conditions',
-        'route': '/terms',
+        'route': '/termscondition',
       },
       {
         'icon': Icons.privacy_tip_outlined,
         'title': 'Privacy Policy',
-        'route': '/privacy',
+        'route': '/privacypolicy',
+      },
+      {
+        'icon': Icons.person_add,
+        'title': 'Invite a Friend',
+        'route': '/inviteus',
       },
       {
         'icon': Icons.support_agent_outlined,
         'title': 'Contact Us',
-        'route': '/contact',
+        'route': '/contactus',
       },
       {'icon': Icons.logout_outlined, 'title': 'Logout', 'route': 'logout'},
     ];
@@ -200,14 +205,16 @@ class ProfileView extends StatelessWidget {
       case '/commissionwallet':
         Get.toNamed('/commissionwallet');
         break;
-      case '/terms':
-        Get.toNamed('/terms');
+      case '/termscondition':
+        Get.toNamed('/termscondition');
         break;
-      case '/privacy':
-        Get.toNamed('/privacy');
+      case '/privacypolicy':
+        Get.toNamed('/privacypolicy');
         break;
-      case '/contact':
-        Get.toNamed('/contact');
+      case '/inviteus':
+        Get.toNamed('/inviteus');
+      case '/contactus':
+        Get.toNamed('/contactus');
         break;
       case 'logout':
         _showLogoutDialog();

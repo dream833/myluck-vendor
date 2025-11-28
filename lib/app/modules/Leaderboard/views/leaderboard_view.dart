@@ -53,11 +53,11 @@ class LeaderboardView extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      _buildHeaderCell("Rank", flex: 2),
-                      _buildHeaderCell("Shop", flex: 3),
+                      _buildHeaderCell("Rank", flex: 1),
+                      _buildHeaderCell("Shop", flex: 2),
                       _buildHeaderCell("Likes", flex: 2),
-                      _buildHeaderCell("Coins", flex: 2),
-                      _buildHeaderCell("Stars", flex: 2),
+                      // _buildHeaderCell("Coins", flex: 2),
+                      // _buildHeaderCell("Stars", flex: 2),
                     ],
                   ),
                 ),
@@ -93,8 +93,8 @@ class LeaderboardView extends StatelessWidget {
                         _buildCell("$rank", flex: 1, align: TextAlign.center),
                         _buildCell(data["shop_name"], flex: 3),
                         _buildCell("${data["likes"]}", flex: 2),
-                        _buildCell("${data["coins"]}", flex: 2),
-                        _buildCell("${data["stars"]}", flex: 2),
+                        // _buildCell("${data["coins"]}", flex: 2),
+                        // _buildCell("${data["stars"]}", flex: 2),
                       ],
                     ),
                   );

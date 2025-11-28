@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rewardvendor/app/data/config/appcolor.dart';
 import '../controllers/termscondition_controller.dart';
 
 class TermsconditionView extends GetView<TermsconditionController> {
@@ -11,7 +12,7 @@ class TermsconditionView extends GetView<TermsconditionController> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Appcolor.secondary,
         centerTitle: true,
         title: const Text(
           "Terms & Conditions",
