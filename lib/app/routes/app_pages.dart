@@ -2,12 +2,16 @@ import 'package:get/get.dart';
 
 import '../modules/BottomNavigationBar/bindings/bottom_navigation_bar_binding.dart';
 import '../modules/BottomNavigationBar/views/bottom_navigation_bar_view.dart';
+import '../modules/Contactus/bindings/contactus_binding.dart';
+import '../modules/Contactus/views/contactus_view.dart';
 import '../modules/Leaderboard/bindings/leaderboard_binding.dart';
 import '../modules/Leaderboard/views/leaderboard_view.dart';
 import '../modules/Login/bindings/login_binding.dart';
 import '../modules/Login/views/login_view.dart';
 import '../modules/OwnPurchaseHistory/bindings/own_purchase_history_binding.dart';
 import '../modules/OwnPurchaseHistory/views/own_purchase_history_view.dart';
+import '../modules/Privacypolicy/bindings/privacypolicy_binding.dart';
+import '../modules/Privacypolicy/views/privacypolicy_view.dart';
 import '../modules/Qrscannerpage/bindings/qrscannerpage_binding.dart';
 import '../modules/Qrscannerpage/views/qrscannerpage_view.dart';
 import '../modules/Signup/bindings/signup_binding.dart';
@@ -26,6 +30,8 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
+import '../modules/termscondition/bindings/termscondition_binding.dart';
+import '../modules/termscondition/views/termscondition_view.dart';
 import '../modules/walletbalance/bindings/walletbalance_binding.dart';
 import '../modules/walletbalance/views/walletbalance_view.dart';
 import '../modules/walletpackageview/bindings/walletpackageview_binding.dart';
@@ -113,6 +119,21 @@ class AppPages {
       name: _Paths.COMMISSIONWALLET,
       page: () => const CommissionwalletView(),
       binding: CommissionwalletBinding(),
+    ),
+    GetPage(
+      name: _Paths.TERMSCONDITION,
+      page: () => const TermsconditionView(),
+      binding: TermsconditionBinding(),
+    ),
+    GetPage(
+      name: _Paths.PRIVACYPOLICY,
+      page: () => const PrivacypolicyView(),
+      binding: PrivacypolicyBinding(),
+    ),
+    GetPage(
+      name: _Paths.CONTACTUS,
+      page: () => const ContactusView(),
+      binding: ContactusBinding(),
     ),
   ];
 }

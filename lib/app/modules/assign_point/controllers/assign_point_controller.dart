@@ -74,7 +74,11 @@ class AssignPointController extends GetxController {
       var datam = res.data;
 
       if (datam['status'] == 200) {
-        Get.snackbar('Success', datam['message'] ?? 'Reward sent successfully');
+        Get.snackbar(
+          'Success',
+          datam['message'] ?? 'Reward sent successfully',
+          duration: Duration(seconds: 2),
+        );
         starController.clear();
         coinController.clear();
         shoppingprice.clear();

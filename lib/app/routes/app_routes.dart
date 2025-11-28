@@ -18,6 +18,9 @@ abstract class Routes {
   static const DUEDETAILS = _Paths.DUEDETAILS;
   static const OWN_PURCHASE_HISTORY = _Paths.OWN_PURCHASE_HISTORY;
   static const COMMISSIONWALLET = _Paths.COMMISSIONWALLET;
+  static const TERMSCONDITION = _Paths.TERMSCONDITION;
+  static const PRIVACYPOLICY = _Paths.PRIVACYPOLICY;
+  static const CONTACTUS = _Paths.CONTACTUS;
 }
 
 abstract class _Paths {
@@ -37,4 +40,7 @@ abstract class _Paths {
   static const DUEDETAILS = '/duedetails';
   static const OWN_PURCHASE_HISTORY = '/own-purchase-history';
   static const COMMISSIONWALLET = '/commissionwallet';
+  static const TERMSCONDITION = '/termscondition';
+  static const PRIVACYPOLICY = '/privacypolicy';
+  static const CONTACTUS = '/contactus';
 }
