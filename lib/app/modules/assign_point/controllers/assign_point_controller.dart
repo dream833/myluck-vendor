@@ -77,6 +77,9 @@ class AssignPointController extends GetxController {
         Get.snackbar('Success', datam['message'] ?? 'Reward sent successfully');
         starController.clear();
         coinController.clear();
+        shoppingprice.clear();
+        proddescription.clear();
+        searchController.clear();
       } else {
         Get.snackbar('Error', datam['message'] ?? 'Failed to assign reward');
       }

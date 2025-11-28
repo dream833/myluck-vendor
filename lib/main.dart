@@ -10,7 +10,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
 
-  // 🔹 Initialize storage
   final box = GetStorage();
 
   Get.put(EditProfileController());
