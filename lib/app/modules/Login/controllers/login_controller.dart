@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewardvendor/app/data/config/app_config.dart';
@@ -14,10 +16,23 @@ class LoginController extends GetxController {
   var totalBalance = 0.obs;
 
   void showSnack(String msg, {Color bgColor = Colors.redAccent}) {
-    final context = Get.key.currentContext!;
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(msg), backgroundColor: bgColor));
+    final context = Get.context ?? Get.overlayContext;
+
+    if (context != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(msg),
+          backgroundColor: bgColor,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    } else {
+      Get.rawSnackbar(
+        message: msg,
+        backgroundColor: bgColor,
+        duration: const Duration(seconds: 2),
+      );
+    }
   }
 
   Future<void> login() async {
@@ -31,18 +46,22 @@ class LoginController extends GetxController {
 
     try {
       isLoading.value = true;
-
       final response = await dioPost(
         endUrl: 'shopkeeper/login',
         data: {"email": email, "password": password},
       );
-
+      if (response.statusCode == 401) {
+        showSnack("Invalid credentials");
+        return;
+      }
       var data = response.data;
-
-      if (data['status'] == 200) {
+      if (data['status'] == 200 && data['message'] == "Invalid credentials.") {
+        showSnack("Invalid credentials");
+        return;
+      }
+      if (data['status'] == 200 && data['data'] != null && data['data'] != []) {
         final token = data['access_token'];
         final user = data['data'];
-
         getBox.write(USER_TOKEN, token);
         getBox.write(IS_USER_LOGGED_IN, true);
         getBox.write(USER_ID, user['id']);
@@ -56,16 +75,17 @@ class LoginController extends GetxController {
 
         await Get.find<EditProfileController>().fetchProfile(noSnackbar: true);
 
-        showSnack(data['message'] ?? "Login Successful", bgColor: Colors.green);
+        showSnack("Login Successful", bgColor: Colors.green);
 
-        await Future.delayed(const Duration(milliseconds: 200));
-
-        Get.offAllNamed('/bottom-navigation-bar');
-      } else {
-        showSnack(data['message'] ?? "Invalid credentials");
+        Future.delayed(const Duration(milliseconds: 200), () {
+          Get.offAllNamed('/bottom-navigation-bar');
+        });
+        return;
       }
+      showSnack(data['message'] ?? "Login failed");
     } catch (e) {
-      showSnack("Something went wrong: $e");
+      showSnack("Something went wrong");
+      log("ERROR: $e");
     } finally {
       isLoading.value = false;
     }
