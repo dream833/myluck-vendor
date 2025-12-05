@@ -13,6 +13,7 @@ class SignupController extends GetxController {
   final shopNameController = TextEditingController();
   final addressController = TextEditingController();
   final referralController = TextEditingController();
+  final description = TextEditingController();
 
   var ispwvisible = true.obs;
   var isLoading = false.obs;
@@ -26,9 +27,17 @@ class SignupController extends GetxController {
   var lat = 0.0.obs;
   var lng = 0.0.obs;
 
-  /// ✅ Category list and selection
+  /// Category list
   final categories = <Map<String, dynamic>>[].obs;
   final selectedCategory = RxnString();
+
+  // ⭐ GLOBAL SNACKBAR FIX
+  void showSnack(String msg, {Color bg = Colors.redAccent}) {
+    final context = Get.key.currentContext!;
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(msg), backgroundColor: bg));
+  }
 
   @override
   void onInit() {
@@ -37,6 +46,7 @@ class SignupController extends GetxController {
     loadCategories();
   }
 
+  // Load Categories
   Future<void> loadCategories() async {
     try {
       final res = await dioGet("store-category-list");
@@ -52,24 +62,14 @@ class SignupController extends GetxController {
           ),
         );
       } else {
-        Get.snackbar(
-          "Error",
-          "Failed to load categories",
-          backgroundColor: Colors.redAccent,
-          colorText: Colors.white,
-        );
+        showSnack("Failed to load categories");
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        "Something went wrong loading categories",
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
-      );
+      showSnack("Something went wrong loading categories");
     }
   }
 
-  // ✅ Image picker functions
+  // Image pickers
   Future<void> pickSelfPhoto() async => _pickImage((p) => selfPhoto.value = p);
   Future<void> pickShopPhoto() async => _pickImage((p) => shopPhoto.value = p);
   Future<void> pickDocPhoto() async => _pickImage((p) => docPhoto.value = p);
@@ -110,12 +110,11 @@ class SignupController extends GetxController {
     );
   }
 
-  // ✅ Get current location
+  // Location
   Future<void> getCurrentLocation() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      await Geolocator.openLocationSettings();
-      Get.snackbar("Error", "Please enable location services");
+      showSnack("Please enable location services");
       return;
     }
 
@@ -127,7 +126,7 @@ class SignupController extends GetxController {
 
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {
-      Get.snackbar("Error", "Location permission denied");
+      showSnack("Location permission denied");
       return;
     }
 
@@ -136,27 +135,37 @@ class SignupController extends GetxController {
     );
     lat.value = pos.latitude;
     lng.value = pos.longitude;
-    debugPrint("✅ Location: ${lat.value}, ${lng.value}");
   }
 
-  Future<void> register() async {
+  // Validation
+  bool validateFields() {
     if (fullname.text.isEmpty ||
         email.text.isEmpty ||
         passwordController.text.isEmpty ||
         phoneController.text.isEmpty ||
         shopNameController.text.isEmpty ||
         addressController.text.isEmpty ||
+        referralController.text.isEmpty ||
         selfPhoto.value.isEmpty ||
         shopPhoto.value.isEmpty ||
         docPhoto.value.isEmpty ||
-        referralController.text.isEmpty ||
         selectedCategory.value == null) {
-      Get.snackbar(
-        "Error",
-        "Please fill all required fields",
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
-      );
+      showSnack("All fields are mandatory");
+      return false;
+    }
+
+    if (phoneController.text.length != 10 ||
+        !RegExp(r'^[0-9]{10}$').hasMatch(phoneController.text)) {
+      showSnack("Mobile number must be 10 digits");
+      return false;
+    }
+
+    return true;
+  }
+
+  // Register function
+  Future<void> register() async {
+    if (!validateFields()) {
       return;
     }
 
@@ -191,6 +200,7 @@ class SignupController extends GetxController {
           selfPhoto.value,
           filename: "self_${DateTime.now().millisecondsSinceEpoch}.jpg",
         ),
+        "description": description.text,
       };
 
       var response = await dioPost(
@@ -204,29 +214,14 @@ class SignupController extends GetxController {
       if (response.statusCode == 200 &&
           (response.data["status"] == 200 ||
               response.data["success"] == true)) {
-        Get.snackbar(
-          "Success",
-          "Registration completed successfully",
-          backgroundColor: Colors.teal,
-          colorText: Colors.white,
-        );
-        Get.offAllNamed('/bottom-navigation-bar');
+        showSnack("Registration completed successfully", bg: Colors.teal);
+        Get.offAllNamed('/login');
       } else {
-        Get.snackbar(
-          "Failed",
-          response.data["message"] ?? "Registration failed",
-          backgroundColor: Colors.redAccent,
-          colorText: Colors.white,
-        );
+        showSnack(response.data["message"] ?? "Registration failed");
       }
     } catch (e) {
       Get.back();
-      Get.snackbar(
-        "Error",
-        "Something went wrong: $e",
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
-      );
+      showSnack("Something went wrong: $e");
     }
   }
 }

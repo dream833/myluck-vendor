@@ -19,12 +19,12 @@ class HomeController extends GetxController {
     try {
       isLoading(true);
 
-      final shopId = getBox.read('USER_ID');
+      final shopId = getBox.read(USER_ID);
       print("📡 Fetching dues for shop_id: $shopId");
 
       final response = await dioPost(
         endUrl: "shopkeeper/due-payment",
-        data: {"shop_id": 4},
+        data: {"shop_id": shopId},
       );
 
       if (response.statusCode == 200 && response.data["data"] != null) {

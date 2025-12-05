@@ -30,9 +30,23 @@ void SHOW_SNACKBAR({int? duration, String? message, bool? isSuccess}) {
       //   image: AssetImage(AppImage.logo),
       // ),
     ),
-    backgroundColor: (isSuccess ?? true) ? Colors.green : Colors.red,
+    backgroundColor: (isSuccess ?? true) ? Colors.teal : Colors.red,
     duration: Duration(milliseconds: duration ?? 2500),
     message: message ?? "No Message",
   );
   Get.showSnackbar(snackbar);
+}
+
+void showSnack(String title, String msg, {Color bg = Colors.black}) {
+  Get.showSnackbar(
+    GetSnackBar(
+      title: title,
+      message: msg,
+      duration: const Duration(seconds: 2),
+      backgroundColor: bg,
+      snackPosition: SnackPosition.TOP,
+      margin: const EdgeInsets.all(12),
+      borderRadius: 8,
+    ),
+  );
 }

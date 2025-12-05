@@ -11,7 +11,7 @@ class ProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> menuItems = [
-      {'icon': Icons.edit, 'title': 'Edit Profile', 'route': '/edit-profile'},
+      {'icon': Icons.edit, 'title': 'Profile', 'route': '/edit-profile'},
       {
         'icon': Icons.shopping_bag,
         'title': 'Customer Transaction History',
@@ -247,7 +247,7 @@ class ProfileView extends StatelessWidget {
               Get.back();
               Get.offAllNamed('/login');
             },
-            child: const Text("Logout"),
+            child: const Text("Logout", style: TextStyle(color: Colors.white)),
           ),
         ],
       ),

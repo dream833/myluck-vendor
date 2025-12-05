@@ -11,7 +11,7 @@ class EditProfileView extends GetView<EditProfileController> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Edit Profile"),
+        title: const Text("Profile"),
         centerTitle: true,
         backgroundColor: Colors.teal,
         foregroundColor: Colors.white,

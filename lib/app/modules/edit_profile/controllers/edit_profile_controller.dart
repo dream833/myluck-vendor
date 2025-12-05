@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-
 import 'package:rewardvendor/app/data/config/app_config.dart';
 import 'package:rewardvendor/app/data/function/mydio.dart';
 
@@ -18,10 +17,10 @@ class EditProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchProfile();
+    fetchProfile(noSnackbar: false);
   }
 
-  Future<void> fetchProfile() async {
+  Future<void> fetchProfile({required bool noSnackbar}) async {
     try {
       isLoading(true);
 
@@ -29,18 +28,14 @@ class EditProfileController extends GetxController {
 
       if (shopkeeperId == null) {
         print("❌ USER_ID not found in storage!");
-        Get.snackbar(
-          "Error",
-          "No USER_ID found — please login again.",
-          backgroundColor: Colors.redAccent,
-          colorText: Colors.white,
-        );
+        if (!noSnackbar) {
+          _showSnack("Error", "No USER_ID found — please login again.");
+        }
         isLoading(false);
         return;
       }
 
       int id = int.tryParse(shopkeeperId.toString()) ?? 0;
-
       print("🟢 Shopkeeper ID from box: $id");
 
       final response = await dioPost(
@@ -64,23 +59,32 @@ class EditProfileController extends GetxController {
         print("✅ Profile loaded successfully: ${name.value}");
       } else {
         print("⚠️ Invalid response: ${response.data}");
-        Get.snackbar(
-          "Error",
-          "Failed to load profile data",
-          backgroundColor: Colors.redAccent,
-          colorText: Colors.white,
-        );
+        if (!noSnackbar) {
+          _showSnack("Error", "Failed to load profile data");
+        }
       }
     } catch (e) {
       print("❌ Exception: $e");
-      Get.snackbar(
-        "Error",
-        "Something went wrong: $e",
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
-      );
+      if (!noSnackbar) {
+        _showSnack("Error", "Something went wrong: $e");
+      }
     } finally {
       isLoading(false);
     }
+  }
+
+  /// Overlay-safe snackbar
+  void _showSnack(String title, String message) {
+    Get.showSnackbar(
+      GetSnackBar(
+        title: title,
+        message: message,
+        duration: const Duration(seconds: 2),
+        backgroundColor: Colors.redAccent,
+        snackPosition: SnackPosition.TOP,
+        margin: const EdgeInsets.all(12),
+        borderRadius: 8,
+      ),
+    );
   }
 }

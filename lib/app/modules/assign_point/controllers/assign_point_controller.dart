@@ -17,7 +17,7 @@ class AssignPointController extends GetxController {
   Future<void> searchCustomer() async {
     final code = searchController.text.trim();
     if (code.isEmpty) {
-      Get.snackbar('Error', 'Please enter customer code');
+      showSnack('Error', 'Please enter customer code', bg: Colors.redAccent);
       return;
     }
 
@@ -34,10 +34,14 @@ class AssignPointController extends GetxController {
         isCustomerLoaded.value = true;
       } else {
         isCustomerLoaded.value = false;
-        Get.snackbar('Not Found', datum['message'] ?? 'No customer found');
+        showSnack(
+          'Not Found',
+          datum['message'] ?? 'No customer found',
+          bg: Colors.redAccent,
+        );
       }
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      showSnack('Error', e.toString(), bg: Colors.redAccent);
     } finally {
       isLoading.value = false;
     }
@@ -45,17 +49,20 @@ class AssignPointController extends GetxController {
 
   Future<void> assignReward() async {
     if (!isCustomerLoaded.value) {
-      Get.snackbar('Error', 'No customer selected');
+      showSnack('Error', 'No customer selected', bg: Colors.redAccent);
       return;
     }
     var shopkeeperId = getBox.read(USER_ID);
-
     int id = int.tryParse(shopkeeperId.toString()) ?? 0;
 
     final star = starController.text.trim();
     final coin = coinController.text.trim();
     if (star.isEmpty && coin.isEmpty) {
-      Get.snackbar('Error', 'Enter at least one reward value');
+      showSnack(
+        'Error',
+        'Enter at least one reward value',
+        bg: Colors.redAccent,
+      );
       return;
     }
 
@@ -74,21 +81,26 @@ class AssignPointController extends GetxController {
       var datam = res.data;
 
       if (datam['status'] == 200) {
-        Get.snackbar(
+        showSnack(
           'Success',
           datam['message'] ?? 'Reward sent successfully',
-          duration: Duration(seconds: 2),
+          bg: Colors.green,
         );
+
         starController.clear();
         coinController.clear();
         shoppingprice.clear();
         proddescription.clear();
         searchController.clear();
       } else {
-        Get.snackbar('Error', datam['message'] ?? 'Failed to assign reward');
+        showSnack(
+          'Error',
+          datam['message'] ?? 'Failed to assign reward',
+          bg: Colors.redAccent,
+        );
       }
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      showSnack('Error', e.toString(), bg: Colors.redAccent);
     } finally {
       isLoading.value = false;
     }

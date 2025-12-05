@@ -4,13 +4,11 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../controllers/signup_controller.dart';
 
-class SignupView extends StatelessWidget {
+class SignupView extends GetView<SignupController> {
   const SignupView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(SignupController());
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -31,12 +29,14 @@ class SignupView extends StatelessWidget {
               onTap: controller.pickSelfPhoto,
             ),
             SizedBox(height: 15.h),
+
             _imagePicker(
               label: "Upload Shop Photo",
               imagePath: controller.shopPhoto,
               onTap: controller.pickShopPhoto,
             ),
             SizedBox(height: 15.h),
+
             _imagePicker(
               label: "Upload Registration Document",
               imagePath: controller.docPhoto,
@@ -76,7 +76,7 @@ class SignupView extends StatelessWidget {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.r),
                   ),
-                  prefixIcon: Icon(Icons.lock, color: Colors.teal, size: 22.sp),
+                  prefixIcon: Icon(Icons.lock, color: Colors.teal),
                   suffixIcon: IconButton(
                     onPressed: () {
                       controller.ispwvisible.value =
@@ -122,20 +122,28 @@ class SignupView extends StatelessWidget {
                 },
               ),
             ),
-            SizedBox(height: 10.h),
+            SizedBox(height: 20.h),
+
             _textField(
               label: "Address",
               icon: Icons.location_on,
               controller: controller.addressController,
-              // maxLines: 1,
             ),
             SizedBox(height: 20.h),
+
+            _textField(
+              label: "Description",
+              icon: Icons.description,
+              controller: controller.description,
+            ),
+            SizedBox(height: 20.h),
+
             _textField(
               label: "Referral Code or Sales Code",
               icon: Icons.inventory_outlined,
               controller: controller.referralController,
             ),
-            SizedBox(height: 15.h),
+            SizedBox(height: 20.h),
 
             Obx(
               () => SizedBox(
@@ -181,6 +189,7 @@ class SignupView extends StatelessWidget {
     );
   }
 
+  // 🔹 Text Field Widget
   Widget _textField({
     required String label,
     required IconData icon,
@@ -195,11 +204,12 @@ class SignupView extends StatelessWidget {
       decoration: InputDecoration(
         labelText: label,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r)),
-        prefixIcon: Icon(icon, color: Colors.teal, size: 22.sp),
+        prefixIcon: Icon(icon, color: Colors.teal),
       ),
     );
   }
 
+  // 🔹 Image Picker Widget
   Widget _imagePicker({
     required String label,
     required RxString imagePath,

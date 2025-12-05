@@ -19,32 +19,42 @@ class CommissionwalletView extends GetView<CommissionwalletController> {
         centerTitle: true,
         elevation: 0,
       ),
+
       body: Obx(() {
         if (controller.loading.value) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        return Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              _walletCard(
-                title: "Total Stars",
-                value: controller.star.value.toString(),
-                icon: Icons.star,
-                iconColor: Colors.amber,
-              ),
-              const SizedBox(height: 20),
-              _walletCard(
-                title: "Total Coins",
-                value: controller.coin.value.toString(),
-                icon: Icons.monetization_on,
-                iconColor: Colors.green,
-              ),
-              const Spacer(),
+        return RefreshIndicator(
+          color: Appcolor.secondary,
+          onRefresh: () async {
+            await controller.fetchCommissionBalance();
+          },
 
-              // Withdraw Button
-            ],
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  _walletCard(
+                    title: "Total Stars",
+                    value: controller.star.value.toString(),
+                    icon: Icons.star,
+                    iconColor: Colors.amber,
+                  ),
+                  const SizedBox(height: 20),
+                  _walletCard(
+                    title: "Total Coins",
+                    value: controller.coin.value.toString(),
+                    icon: Icons.monetization_on,
+                    iconColor: Colors.green,
+                  ),
+                  SizedBox(height: Get.height * 0.5),
+                ],
+              ),
+            ),
           ),
         );
       }),

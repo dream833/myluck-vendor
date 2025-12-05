@@ -2,19 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:rewardvendor/app/modules/Login/controllers/login_controller.dart';
-import 'package:rewardvendor/app/modules/edit_profile/controllers/edit_profile_controller.dart';
 import 'package:rewardvendor/app/routes/app_pages.dart';
+
+import 'app/modules/Login/controllers/login_controller.dart';
+import 'app/modules/edit_profile/controllers/edit_profile_controller.dart';
+
+class InitialBindings extends Bindings {
+  @override
+  void dependencies() {
+    Get.put((EditProfileController()));
+    Get.put((LoginController()));
+  }
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
 
   final box = GetStorage();
-
-  Get.put(EditProfileController());
-  Get.put(LoginController());
-
   final isLoggedIn = box.read('IS_USER_LOGGED_IN') ?? false;
 
   runApp(
@@ -26,16 +31,20 @@ Future<void> main() async {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: "Reward Vendor",
+
           theme: ThemeData(
             primarySwatch: Colors.teal,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
 
+          // ⬇️ CONTROLLERS AUTO LOAD HOBE
+          initialBinding: InitialBindings(),
+
+          // ⬇️ LOGIN CHECK
           initialRoute: isLoggedIn
               ? Routes.BOTTOM_NAVIGATION_BAR
               : Routes.LOGIN,
 
-          // 🔹 All app pages
           getPages: AppPages.routes,
         );
       },

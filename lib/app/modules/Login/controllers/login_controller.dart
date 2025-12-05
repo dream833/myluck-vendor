@@ -9,23 +9,23 @@ class LoginController extends GetxController {
   final passwordController = TextEditingController(text: '12345');
 
   var isLoading = false.obs;
-
-  // 🔹 Coins, Stars, Total Balance
   var coins = 0.obs;
   var stars = 0.obs;
   var totalBalance = 0.obs;
+
+  void showSnack(String msg, {Color bgColor = Colors.redAccent}) {
+    final context = Get.key.currentContext!;
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(msg), backgroundColor: bgColor));
+  }
 
   Future<void> login() async {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
-      Get.snackbar(
-        "Error",
-        "Please fill all fields",
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
-      );
+      showSnack("Please fill all fields");
       return;
     }
 
@@ -43,49 +43,29 @@ class LoginController extends GetxController {
         final token = data['access_token'];
         final user = data['data'];
 
-        // 🔹 Save user info in GetStorage
         getBox.write(USER_TOKEN, token);
         getBox.write(IS_USER_LOGGED_IN, true);
         getBox.write(USER_ID, user['id']);
         getBox.write(USER_EMAIL, user['email']);
-
         getBox.write(USER_LOGIN, true);
         getBox.write(REFERRAL_CODE, user['self_referral_code']);
 
-        // 🔹 Save coins and stars from API if available
         coins.value = user['coin'] ?? 0;
         stars.value = user['star'] ?? 0;
         totalBalance.value = coins.value + stars.value;
 
-        print("✅ USER_ID: ${user['id']}");
-        print("✅ EMAIL: ${user['email']}");
-        print("✅ TOKEN: $token");
-        print("✅ Coins: ${coins.value}, Stars: ${stars.value}");
-        await Get.find<EditProfileController>().fetchProfile();
-        Get.snackbar(
-          "Success",
-          data['message'] ?? "Login Successful",
-          backgroundColor: Colors.teal,
-          colorText: Colors.white,
-        );
+        await Get.find<EditProfileController>().fetchProfile(noSnackbar: true);
 
-        // 🔹 Navigate to Home / Bottom Navigation
+        showSnack(data['message'] ?? "Login Successful", bgColor: Colors.green);
+
+        await Future.delayed(const Duration(milliseconds: 200));
+
         Get.offAllNamed('/bottom-navigation-bar');
       } else {
-        Get.snackbar(
-          "Failed",
-          data['message'] ?? "Invalid credentials",
-          backgroundColor: Colors.redAccent,
-          colorText: Colors.white,
-        );
+        showSnack(data['message'] ?? "Invalid credentials");
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        "Something went wrong: $e",
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
-      );
+      showSnack("Something went wrong: $e");
     } finally {
       isLoading.value = false;
     }
