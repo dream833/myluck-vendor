@@ -9,6 +9,7 @@ class AssignPointController extends GetxController {
   final TextEditingController coinController = TextEditingController();
   final TextEditingController shoppingprice = TextEditingController();
   var proddescription = TextEditingController();
+  var isScanned = false;
 
   var isLoading = false.obs;
   var isCustomerLoaded = false.obs;
@@ -106,8 +107,10 @@ class AssignPointController extends GetxController {
     }
   }
 
-  /// 📷 QR Scan handler
   void scanQr(String scannedCode) {
+    if (isScanned) return;
+
+    isScanned = true;
     searchController.text = scannedCode;
     searchCustomer();
   }

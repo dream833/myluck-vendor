@@ -7,8 +7,8 @@ import 'package:rewardvendor/app/data/function/mydio.dart';
 import 'package:rewardvendor/app/modules/edit_profile/controllers/edit_profile_controller.dart';
 
 class LoginController extends GetxController {
-  final emailController = TextEditingController(text: 'vendor1800@gmail.com');
-  final passwordController = TextEditingController(text: '12345');
+  final emailController = TextEditingController(text: 'shib1000@gmail.com');
+  final passwordController = TextEditingController(text: '123456789');
 
   var isLoading = false.obs;
   var coins = 0.obs;

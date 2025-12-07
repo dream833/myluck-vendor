@@ -48,7 +48,12 @@ class AssignPointView extends StatelessWidget {
                   ),
                   SizedBox(width: 10.w),
                   InkWell(
-                    onTap: () => Get.to(() => QrscannerpageView()),
+                    onTap: () async {
+                      final result = await Get.to(() => QrscannerpageView());
+                      if (result != null) {
+                        controller.searchController.text = result;
+                      }
+                    },
                     child: Container(
                       padding: EdgeInsets.all(12.w),
                       decoration: BoxDecoration(
@@ -169,6 +174,7 @@ class AssignPointView extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20.h),
+
               TextField(
                 controller: controller.shoppingprice,
                 keyboardType: TextInputType.number,
@@ -206,6 +212,7 @@ class AssignPointView extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20.h),
+
               // 🚀 Assign reward button
               Obx(
                 () => SizedBox(

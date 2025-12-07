@@ -89,7 +89,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.QRSCANNERPAGE,
-      page: () => const QrscannerpageView(),
+      page: () => QrscannerpageView(),
       binding: QrscannerpageBinding(),
     ),
     GetPage(

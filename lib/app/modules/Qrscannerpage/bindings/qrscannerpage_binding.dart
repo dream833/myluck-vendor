@@ -5,8 +5,6 @@ import '../controllers/qrscannerpage_controller.dart';
 class QrscannerpageBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<QrscannerpageController>(
-      () => QrscannerpageController(),
-    );
+    Get.lazyPut<QrscannerController>(() => QrscannerController());
   }
 }

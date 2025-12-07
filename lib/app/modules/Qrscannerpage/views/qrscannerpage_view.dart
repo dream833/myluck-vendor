@@ -1,58 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:rewardvendor/app/modules/assign_point/controllers/assign_point_controller.dart';
+import 'package:rewardvendor/app/modules/Qrscannerpage/controllers/qrscannerpage_controller.dart';
 
 class QrscannerpageView extends StatelessWidget {
-  const QrscannerpageView({super.key});
+  QrscannerpageView({super.key});
+
+  final QrscannerController controller = Get.put(QrscannerController());
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<AssignPointController>();
-
     return Scaffold(
-      backgroundColor: Colors.teal.shade50,
-      appBar: AppBar(
-        backgroundColor: Colors.teal,
-        title: const Text(
-          'Scan QR Code',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-      ),
-      body: Stack(
-        alignment: Alignment.center,
+      appBar: AppBar(title: const Text('QR Scanner')),
+      body: Column(
         children: [
-          MobileScanner(
-            controller: MobileScannerController(facing: CameraFacing.back),
-            onDetect: (capture) {
-              final barcode = capture.barcodes.first;
-              final code = barcode.rawValue;
-              if (code != null && code.isNotEmpty) {
-                controller.scanQr(code);
-                Get.back();
-              }
-            },
-          ),
-          Container(
-            width: 260,
-            height: 260,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.white, width: 3),
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          Positioned(
-            bottom: 40,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-              decoration: BoxDecoration(
-                color: Colors.teal.withOpacity(0.8),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: const Text(
-                "Align the QR code inside the box",
-                style: TextStyle(color: Colors.white, fontSize: 14),
-              ),
+          Expanded(
+            flex: 3,
+            child: Stack(
+              children: [
+                MobileScanner(
+                  controller: controller.scannerController,
+                  onDetect: controller.onDetect,
+                ),
+                // 🔲 Highlight box for scan area
+                Center(
+                  child: Container(
+                    width: 250,
+                    height: 250,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.teal, width: 3),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
