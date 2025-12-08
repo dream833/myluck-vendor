@@ -31,7 +31,6 @@ class SignupController extends GetxController {
   final categories = <Map<String, dynamic>>[].obs;
   final selectedCategory = RxnString();
 
-  // ⭐ GLOBAL SNACKBAR FIX
   void showSnack(String msg, {Color bg = Colors.redAccent}) {
     final context = Get.key.currentContext!;
     ScaffoldMessenger.of(
@@ -172,11 +171,6 @@ class SignupController extends GetxController {
     await getCurrentLocation();
 
     try {
-      Get.dialog(
-        const Center(child: CircularProgressIndicator(color: Colors.teal)),
-        barrierDismissible: false,
-      );
-
       var formData = {
         "name": fullname.text,
         "email": email.text,
@@ -212,8 +206,8 @@ class SignupController extends GetxController {
       Get.back();
 
       if (response.statusCode == 200 &&
-          (response.data["status"] == 200 ||
-              response.data["success"] == true)) {
+          (response.data["status"] == 200 &&
+              response.data["message"] == "Registration Successfully.")) {
         showSnack("Registration completed successfully", bg: Colors.teal);
         Get.offAllNamed('/login');
       } else {

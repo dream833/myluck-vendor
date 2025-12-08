@@ -107,7 +107,23 @@ class LoginView extends GetView<LoginController> {
                     ),
                   ),
 
-                  SizedBox(height: 15.h),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {
+                        Get.toNamed(('/forget-password'));
+                      },
+                      child: Text(
+                        "Forgot Password?",
+                        style: TextStyle(
+                          color: Colors.teal,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10.h),
 
                   /// Signup Text
                   Center(

@@ -50,3 +50,35 @@ void showSnack(String title, String msg, {Color bg = Colors.black}) {
     ),
   );
 }
+
+// final snackbar
+void showTopSnack(String msg, {bool isError = false}) {
+  final context = Get.key.currentContext!;
+
+  // Colors based on success or error
+  final Color bgColor = isError ? Colors.red.shade50 : Colors.teal.shade50;
+  final Color textColor = isError ? Colors.red : Colors.teal;
+  final IconData icon = isError ? Icons.error : Icons.check_circle;
+
+  ScaffoldMessenger.of(context).clearMaterialBanners();
+
+  ScaffoldMessenger.of(context).showMaterialBanner(
+    MaterialBanner(
+      backgroundColor: bgColor,
+      content: Text(
+        msg,
+        style: TextStyle(
+          color: textColor,
+          fontSize: 15,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      leading: Icon(icon, color: textColor),
+      actions: const [SizedBox.shrink()],
+    ),
+  );
+
+  Future.delayed(const Duration(seconds: 3), () {
+    ScaffoldMessenger.of(context).clearMaterialBanners();
+  });
+}

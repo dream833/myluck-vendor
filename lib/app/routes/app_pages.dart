@@ -4,6 +4,8 @@ import '../modules/BottomNavigationBar/bindings/bottom_navigation_bar_binding.da
 import '../modules/BottomNavigationBar/views/bottom_navigation_bar_view.dart';
 import '../modules/Contactus/bindings/contactus_binding.dart';
 import '../modules/Contactus/views/contactus_view.dart';
+import '../modules/ForgetPassword/bindings/forget_password_binding.dart';
+import '../modules/ForgetPassword/views/forget_password_view.dart';
 import '../modules/Leaderboard/bindings/leaderboard_binding.dart';
 import '../modules/Leaderboard/views/leaderboard_view.dart';
 import '../modules/Login/bindings/login_binding.dart';
@@ -141,6 +143,11 @@ class AppPages {
       name: _Paths.INVITEUS,
       page: () => const InviteusView(),
       binding: InviteusBinding(),
+    ),
+    GetPage(
+      name: _Paths.FORGET_PASSWORD,
+      page: () => const ForgetPasswordView(),
+      binding: ForgetPasswordBinding(),
     ),
   ];
 }
