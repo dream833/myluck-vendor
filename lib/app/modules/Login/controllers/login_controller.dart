@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewardvendor/app/data/config/app_config.dart';
@@ -35,6 +35,15 @@ class LoginController extends GetxController {
     }
   }
 
+  // 🔥 FORCE NEW FCM TOKEN
+  Future<String?> refreshFCMToken() async {
+    await FirebaseMessaging.instance.deleteToken();
+    String? newToken = await FirebaseMessaging.instance.getToken();
+    print("🔥 NEW FCM TOKEN (Login): $newToken");
+    return newToken;
+  }
+
+  // 🔥 LOGIN METHOD (FCM token added)
   Future<void> login() async {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
@@ -46,22 +55,28 @@ class LoginController extends GetxController {
 
     try {
       isLoading.value = true;
+
       final response = await dioPost(
         endUrl: 'shopkeeper/login',
         data: {"email": email, "password": password},
       );
+
       if (response.statusCode == 401) {
         showSnack("Invalid credentials");
         return;
       }
+
       var data = response.data;
+
       if (data['status'] == 200 && data['message'] == "Invalid credentials.") {
         showSnack("Invalid credentials");
         return;
       }
+
       if (data['status'] == 200 && data['data'] != null && data['data'] != []) {
         final token = data['access_token'];
         final user = data['data'];
+
         getBox.write(USER_TOKEN, token);
         getBox.write(IS_USER_LOGGED_IN, true);
         getBox.write(USER_ID, user['id']);
@@ -73,6 +88,14 @@ class LoginController extends GetxController {
         stars.value = user['star'] ?? 0;
         totalBalance.value = coins.value + stars.value;
 
+        String? fcmToken = await refreshFCMToken();
+
+        if (fcmToken != null) {
+          await dioPost(
+            endUrl: 'sent-notification',
+            data: {"user_id": getBox.read(USER_ID), "fcm_token": fcmToken},
+          );
+        }
         await Get.find<EditProfileController>().fetchProfile(noSnackbar: true);
 
         showSnack("Login Successful", bgColor: Colors.green);
@@ -80,8 +103,10 @@ class LoginController extends GetxController {
         Future.delayed(const Duration(milliseconds: 200), () {
           Get.offAllNamed('/bottom-navigation-bar');
         });
+
         return;
       }
+
       showSnack(data['message'] ?? "Login failed");
     } catch (e) {
       showSnack("Something went wrong");

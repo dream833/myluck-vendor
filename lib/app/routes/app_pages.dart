@@ -32,6 +32,8 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/inviteus/bindings/inviteus_binding.dart';
 import '../modules/inviteus/views/inviteus_view.dart';
+import '../modules/notification_page/bindings/notification_page_binding.dart';
+import '../modules/notification_page/views/notification_page_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/termscondition/bindings/termscondition_binding.dart';
@@ -148,6 +150,11 @@ class AppPages {
       name: _Paths.FORGET_PASSWORD,
       page: () => const ForgetPasswordView(),
       binding: ForgetPasswordBinding(),
+    ),
+    GetPage(
+      name: _Paths.NOTIFICATION_PAGE,
+      page: () => const NotificationPageView(),
+      binding: NotificationPageBinding(),
     ),
   ];
 }

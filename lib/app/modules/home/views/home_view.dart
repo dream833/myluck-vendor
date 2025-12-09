@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rewardvendor/app/data/function/notification_service.dart';
+import 'package:rewardvendor/app/modules/notification_page/controllers/notification_page_controller.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends StatelessWidget {
@@ -9,6 +11,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(HomeController());
+    var notic = Get.put((NotificationPageController()));
 
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
@@ -37,12 +40,54 @@ class HomeView extends StatelessWidget {
             },
             icon: Icon(Icons.person, size: 26.sp, color: Colors.white),
           ),
-          //notification
-          IconButton(
-            onPressed: () {
-              Get.toNamed("/notifications");
-            },
-            icon: Icon(Icons.notifications, size: 26.sp, color: Colors.white),
+
+          // 🔔 Notification with badge counter
+          Stack(
+            children: [
+              IconButton(
+                onPressed: () {
+                  Get.toNamed("/notification-page");
+                },
+                icon: Icon(
+                  Icons.notifications,
+                  size: 26.sp,
+                  color: Colors.white,
+                ),
+              ),
+
+              // ⭐ Dynamic Badge using GetX
+              Positioned(
+                right: 6,
+                top: 6,
+                child: Obx(() {
+                  final int count = notic.total.value;
+
+                  // ⭐ Hide badge if zero
+                  if (count == 0) return const SizedBox();
+
+                  return Container(
+                    padding: EdgeInsets.all(4.w),
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    constraints: BoxConstraints(
+                      minWidth: 18.w,
+                      minHeight: 18.w,
+                    ),
+                    child: Text(
+                      count > 9 ? "9+" : count.toString(),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ],
           ),
         ],
       ),
