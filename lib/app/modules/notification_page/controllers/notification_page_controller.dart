@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:rewardvendor/app/data/config/app_config.dart';
 
 import '../../../data/function/mydio.dart';
 import '../model/notification_model.dart';
@@ -21,7 +22,7 @@ class NotificationPageController extends GetxController {
     try {
       final response = await dioPost(
         endUrl: "shopkeeper/notification-list",
-        data: {"shop_id": "22"},
+        data: {"shop_id": getBox.read(USER_ID)},
       );
 
       var data = response.data;

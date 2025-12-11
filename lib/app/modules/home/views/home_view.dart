@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:rewardvendor/app/data/function/notification_service.dart';
 import 'package:rewardvendor/app/modules/notification_page/controllers/notification_page_controller.dart';
 import '../controllers/home_controller.dart';
 

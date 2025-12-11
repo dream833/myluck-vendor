@@ -92,8 +92,8 @@ class LoginController extends GetxController {
 
         if (fcmToken != null) {
           await dioPost(
-            endUrl: 'sent-notification',
-            data: {"user_id": getBox.read(USER_ID), "fcm_token": fcmToken},
+            endUrl: 'add-device-token',
+            data: {"role": "vendor", "device_token": fcmToken},
           );
         }
         await Get.find<EditProfileController>().fetchProfile(noSnackbar: true);

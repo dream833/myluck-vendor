@@ -10,13 +10,11 @@ import 'app/routes/app_pages.dart';
 import 'app/modules/Login/controllers/login_controller.dart';
 import 'app/modules/edit_profile/controllers/edit_profile_controller.dart';
 
-// 🔥 Background Handler
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print("🔥 Background Message: ${message.messageId}");
 }
 
-// 🔥 INITIAL BINDINGS
 class InitialBindings extends Bindings {
   @override
   void dependencies() {
@@ -39,24 +37,28 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
-    print("🆕 FCM Token Refreshed Automatically: $newToken");
-  });
-  // ⬇️ Permission FIRST
+
   NotificationSettings settings = await FirebaseMessaging.instance
       .requestPermission(alert: true, badge: true, sound: true);
-
   print("🔔 Permission: ${settings.authorizationStatus}");
 
-  // ⬇️ LOCAL + FCM Notification Setup
   await NotificationService().initNotification();
 
-  // ⬇️ Token MUST come AFTER initNotification()
   await loadFCMToken();
 
-  // Storage
   await GetStorage.init();
   final box = GetStorage();
+
+  // 🔹 Subscribe to 'allusers' topic only once
+  bool isSubscribed = box.read('IS_SUBSCRIBED_ALLUSERS') ?? false;
+  if (!isSubscribed) {
+    await FirebaseMessaging.instance.subscribeToTopic("allusers");
+    print("✅ Subscribed to allusers topic");
+    box.write('IS_SUBSCRIBED_ALLUSERS', true);
+  } else {
+    print("ℹ️ Already subscribed to allusers topic");
+  }
+
   final isLoggedIn = box.read('IS_USER_LOGGED_IN') ?? false;
 
   runApp(
@@ -67,7 +69,7 @@ Future<void> main() async {
       builder: (context, child) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
-          title: "Reward Vendor",
+          title: "Myluck Vendor",
           theme: ThemeData(primarySwatch: Colors.teal),
           initialBinding: InitialBindings(),
           initialRoute: isLoggedIn

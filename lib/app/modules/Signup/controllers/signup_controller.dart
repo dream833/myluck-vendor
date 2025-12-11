@@ -164,11 +164,15 @@ class SignupController extends GetxController {
 
   // Register function
   Future<void> register() async {
-    if (!validateFields()) {
-      return;
-    }
+    if (!validateFields()) return;
 
     await getCurrentLocation();
+
+    // Show loading
+    Get.dialog(
+      const Center(child: CircularProgressIndicator(color: Colors.teal)),
+      barrierDismissible: false,
+    );
 
     try {
       var formData = {
@@ -203,17 +207,47 @@ class SignupController extends GetxController {
         isFile: true,
       );
 
+      // Close loading only (DO NOT POP PAGE)
       Get.back();
 
-      if (response.statusCode == 200 &&
-          (response.data["status"] == 200 &&
-              response.data["message"] == "Registration Successfully.")) {
+      int status = response.statusCode ?? 0;
+      var body = response.data;
+
+      // SUCCESS
+      if (status == 200 &&
+          body["status"] == 200 &&
+          body["message"] == "Registration Successfully.") {
         showSnack("Registration completed successfully", bg: Colors.teal);
         Get.offAllNamed('/login');
-      } else {
-        showSnack(response.data["message"] ?? "Registration failed");
+        return;
       }
+
+      // VALIDATION ERROR 422
+      if (status == 422) {
+        String finalMsg = "";
+
+        var msgObj = body["message"]; // map -> list -> msg
+
+        if (msgObj is Map) {
+          var firstEntry = msgObj.entries.first;
+          var errorsList = firstEntry.value;
+
+          if (errorsList is List && errorsList.isNotEmpty) {
+            finalMsg = errorsList.first.toString();
+          } else {
+            finalMsg = "Validation error";
+          }
+        } else {
+          finalMsg = msgObj.toString();
+        }
+
+        showSnack(finalMsg, bg: Colors.red);
+        return;
+      }
+
+      showSnack(body["message"]?.toString() ?? "Registration failed");
     } catch (e) {
+      // Close loading only
       Get.back();
       showSnack("Something went wrong: $e");
     }

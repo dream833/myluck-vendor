@@ -9,10 +9,9 @@ class NotificationPageView extends GetView<NotificationPageController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffF4F6F8), // 🔥 Light background
-
+      backgroundColor: const Color(0xffF4F6F8),
       appBar: AppBar(
-        backgroundColor: Colors.teal, // 🔥 Teal AppBar
+        backgroundColor: Colors.teal,
         elevation: 0,
         centerTitle: true,
         title: Text(
