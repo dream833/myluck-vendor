@@ -1,3 +1,5 @@
+import 'dart:developer';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewardvendor/app/data/config/app_config.dart';
@@ -5,8 +7,8 @@ import 'package:rewardvendor/app/data/function/mydio.dart';
 import 'package:rewardvendor/app/modules/edit_profile/controllers/edit_profile_controller.dart';
 
 class LoginController extends GetxController {
-  final emailController = TextEditingController(text: 'vendor1800@gmail.com');
-  final passwordController = TextEditingController(text: '12345');
+  final emailController = TextEditingController(text: 'shib1000@gmail.com');
+  final passwordController = TextEditingController(text: '123456789');
 
   var isLoading = false.obs;
   var coins = 0.obs;
@@ -14,12 +16,34 @@ class LoginController extends GetxController {
   var totalBalance = 0.obs;
 
   void showSnack(String msg, {Color bgColor = Colors.redAccent}) {
-    final context = Get.key.currentContext!;
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(msg), backgroundColor: bgColor));
+    final context = Get.context ?? Get.overlayContext;
+
+    if (context != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(msg),
+          backgroundColor: bgColor,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    } else {
+      Get.rawSnackbar(
+        message: msg,
+        backgroundColor: bgColor,
+        duration: const Duration(seconds: 2),
+      );
+    }
   }
 
+  // 🔥 FORCE NEW FCM TOKEN
+  Future<String?> refreshFCMToken() async {
+    await FirebaseMessaging.instance.deleteToken();
+    String? newToken = await FirebaseMessaging.instance.getToken();
+    print("🔥 NEW FCM TOKEN (Login): $newToken");
+    return newToken;
+  }
+
+  // 🔥 LOGIN METHOD (FCM token added)
   Future<void> login() async {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
@@ -37,9 +61,19 @@ class LoginController extends GetxController {
         data: {"email": email, "password": password},
       );
 
+      if (response.statusCode == 401) {
+        showSnack("Invalid credentials");
+        return;
+      }
+
       var data = response.data;
 
-      if (data['status'] == 200) {
+      if (data['status'] == 200 && data['message'] == "Invalid credentials.") {
+        showSnack("Invalid credentials");
+        return;
+      }
+
+      if (data['status'] == 200 && data['data'] != null && data['data'] != []) {
         final token = data['access_token'];
         final user = data['data'];
 
@@ -54,18 +88,29 @@ class LoginController extends GetxController {
         stars.value = user['star'] ?? 0;
         totalBalance.value = coins.value + stars.value;
 
+        String? fcmToken = await refreshFCMToken();
+
+        if (fcmToken != null) {
+          await dioPost(
+            endUrl: 'add-device-token',
+            data: {"role": "vendor", "device_token": fcmToken},
+          );
+        }
         await Get.find<EditProfileController>().fetchProfile(noSnackbar: true);
 
-        showSnack(data['message'] ?? "Login Successful", bgColor: Colors.green);
+        showSnack("Login Successful", bgColor: Colors.green);
 
-        await Future.delayed(const Duration(milliseconds: 200));
+        Future.delayed(const Duration(milliseconds: 200), () {
+          Get.offAllNamed('/bottom-navigation-bar');
+        });
 
-        Get.offAllNamed('/bottom-navigation-bar');
-      } else {
-        showSnack(data['message'] ?? "Invalid credentials");
+        return;
       }
+
+      showSnack(data['message'] ?? "Login failed");
     } catch (e) {
-      showSnack("Something went wrong: $e");
+      showSnack("Something went wrong");
+      log("ERROR: $e");
     } finally {
       isLoading.value = false;
     }

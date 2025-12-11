@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rewardvendor/app/modules/Login/controllers/login_controller.dart';
+import 'package:rewardvendor/app/modules/walletbalance/controllers/walletbalance_controller.dart';
 
 class WalletbalanceView extends StatelessWidget {
   const WalletbalanceView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final loginController = Get.find<LoginController>();
+    final controller = Get.put(WalletbalanceController());
+    controller.fetchWalletBalance();
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -21,7 +23,7 @@ class WalletbalanceView extends StatelessWidget {
       body: RefreshIndicator(
         color: Colors.teal,
         onRefresh: () async {
-          loginController.totalBalance;
+          await controller.fetchWalletBalance();
         },
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -31,11 +33,8 @@ class WalletbalanceView extends StatelessWidget {
             children: [
               SizedBox(height: 16.h),
 
+              // 🔥 Balance Card from WalletbalanceController
               Obx(() {
-                final coins = loginController.coins.value;
-                final stars = loginController.stars.value;
-                final total = loginController.totalBalance.value;
-
                 return Container(
                   width: double.infinity,
                   padding: EdgeInsets.all(24.sp),
@@ -56,22 +55,34 @@ class WalletbalanceView extends StatelessWidget {
                         "Total Balance",
                         style: TextStyle(fontSize: 16.sp, color: Colors.grey),
                       ),
+
                       SizedBox(height: 8.h),
+
                       Text(
-                        "$total",
+                        "${controller.totalbalance.value}",
                         style: TextStyle(
                           fontSize: 36.sp,
                           fontWeight: FontWeight.bold,
                           color: Colors.teal,
                         ),
                       ),
+
                       SizedBox(height: 16.h),
+
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          _balanceChip(Icons.star, "Stars", stars),
+                          _balanceChip(
+                            Icons.star,
+                            "Stars",
+                            controller.totalStars.value,
+                          ),
                           SizedBox(width: 12.w),
-                          _balanceChip(Icons.monetization_on, "Coins", coins),
+                          _balanceChip(
+                            Icons.monetization_on,
+                            "Coins",
+                            controller.totalCoins.value,
+                          ),
                         ],
                       ),
                     ],

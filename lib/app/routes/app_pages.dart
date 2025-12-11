@@ -4,6 +4,8 @@ import '../modules/BottomNavigationBar/bindings/bottom_navigation_bar_binding.da
 import '../modules/BottomNavigationBar/views/bottom_navigation_bar_view.dart';
 import '../modules/Contactus/bindings/contactus_binding.dart';
 import '../modules/Contactus/views/contactus_view.dart';
+import '../modules/ForgetPassword/bindings/forget_password_binding.dart';
+import '../modules/ForgetPassword/views/forget_password_view.dart';
 import '../modules/Leaderboard/bindings/leaderboard_binding.dart';
 import '../modules/Leaderboard/views/leaderboard_view.dart';
 import '../modules/Login/bindings/login_binding.dart';
@@ -30,6 +32,8 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/inviteus/bindings/inviteus_binding.dart';
 import '../modules/inviteus/views/inviteus_view.dart';
+import '../modules/notification_page/bindings/notification_page_binding.dart';
+import '../modules/notification_page/views/notification_page_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/termscondition/bindings/termscondition_binding.dart';
@@ -89,7 +93,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.QRSCANNERPAGE,
-      page: () => const QrscannerpageView(),
+      page: () => QrscannerpageView(),
       binding: QrscannerpageBinding(),
     ),
     GetPage(
@@ -141,6 +145,16 @@ class AppPages {
       name: _Paths.INVITEUS,
       page: () => const InviteusView(),
       binding: InviteusBinding(),
+    ),
+    GetPage(
+      name: _Paths.FORGET_PASSWORD,
+      page: () => const ForgetPasswordView(),
+      binding: ForgetPasswordBinding(),
+    ),
+    GetPage(
+      name: _Paths.NOTIFICATION_PAGE,
+      page: () => const NotificationPageView(),
+      binding: NotificationPageBinding(),
     ),
   ];
 }

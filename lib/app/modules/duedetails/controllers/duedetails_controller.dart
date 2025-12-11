@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:rewardvendor/app/data/config/app_config.dart';
 import 'package:rewardvendor/app/data/function/mydio.dart';
 
 class DuedetailsController extends GetxController {
@@ -27,9 +28,10 @@ class DuedetailsController extends GetxController {
   Future<void> fetchDueList() async {
     try {
       isLoading(true);
+      var shopId = getBox.read(USER_ID);
       final response = await dioPost(
         endUrl: "shopkeeper/due-payment",
-        data: {"shop_id": 4},
+        data: {"shop_id": shopId},
       );
 
       if (response.statusCode == 200 && response.data["data"] != null) {

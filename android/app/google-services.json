@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "724177434736",
+    "project_id": "my-luck-vendor",
+    "storage_bucket": "my-luck-vendor.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:724177434736:android:c68f30b2e8d287cc59dcb5",
+        "android_client_info": {
+          "package_name": "com.dream.myluckvendor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWPlQHtUw54p4IS9eUb3eeRa1Txyu_qFc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

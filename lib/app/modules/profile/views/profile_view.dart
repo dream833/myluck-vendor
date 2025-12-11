@@ -1,6 +1,8 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:rewardvendor/app/modules/edit_profile/controllers/edit_profile_controller.dart';
 
 class ProfileView extends StatelessWidget {
@@ -236,6 +238,8 @@ class ProfileView extends StatelessWidget {
             onPressed: () => Get.back(),
             child: const Text("Cancel", style: TextStyle(color: Colors.grey)),
           ),
+
+          // 🔥 LOGOUT BUTTON
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.teal,
@@ -243,8 +247,23 @@ class ProfileView extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8.r),
               ),
             ),
-            onPressed: () {
+            onPressed: () async {
               Get.back();
+              try {
+                await FirebaseMessaging.instance.deleteToken();
+                print("🔥 Old FCM Token Deleted!");
+
+                String? newToken = await FirebaseMessaging.instance.getToken();
+                print("🔥 New FCM Token After Logout: $newToken");
+
+                // OPTIONAL: Server e new token pathaile ekhane pathabi
+                // await sendNewTokenToServer(newToken);
+              } catch (e) {
+                print("❌ Token Error: $e");
+              }
+
+              final box = GetStorage();
+              await box.erase();
               Get.offAllNamed('/login');
             },
             child: const Text("Logout", style: TextStyle(color: Colors.white)),

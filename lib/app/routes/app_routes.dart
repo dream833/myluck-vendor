@@ -22,6 +22,8 @@ abstract class Routes {
   static const PRIVACYPOLICY = _Paths.PRIVACYPOLICY;
   static const CONTACTUS = _Paths.CONTACTUS;
   static const INVITEUS = _Paths.INVITEUS;
+  static const FORGET_PASSWORD = _Paths.FORGET_PASSWORD;
+  static const NOTIFICATION_PAGE = _Paths.NOTIFICATION_PAGE;
 }
 
 abstract class _Paths {
@@ -45,4 +47,6 @@ abstract class _Paths {
   static const PRIVACYPOLICY = '/privacypolicy';
   static const CONTACTUS = '/contactus';
   static const INVITEUS = '/inviteus';
+  static const FORGET_PASSWORD = '/forget-password';
+  static const NOTIFICATION_PAGE = '/notification-page';
 }

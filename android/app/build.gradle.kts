@@ -1,19 +1,20 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id("com.google.gms.google-services")  // Firebase plugin
     id("dev.flutter.flutter-gradle-plugin")
 }
 
 android {
-    namespace = "com.dream.myluckvendor" 
+    namespace = "com.dream.myluckvendor"
     compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
+compileOptions {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+    isCoreLibraryDesugaringEnabled = true
+}
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
@@ -36,4 +37,10 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+    implementation("com.google.firebase:firebase-messaging")
+     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }

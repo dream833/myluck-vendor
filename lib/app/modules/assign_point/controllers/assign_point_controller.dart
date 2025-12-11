@@ -9,6 +9,7 @@ class AssignPointController extends GetxController {
   final TextEditingController coinController = TextEditingController();
   final TextEditingController shoppingprice = TextEditingController();
   var proddescription = TextEditingController();
+  var isScanned = false;
 
   var isLoading = false.obs;
   var isCustomerLoaded = false.obs;
@@ -17,7 +18,6 @@ class AssignPointController extends GetxController {
   Future<void> searchCustomer() async {
     final code = searchController.text.trim();
     if (code.isEmpty) {
-      showSnack('Error', 'Please enter customer code', bg: Colors.redAccent);
       return;
     }
 
@@ -34,11 +34,7 @@ class AssignPointController extends GetxController {
         isCustomerLoaded.value = true;
       } else {
         isCustomerLoaded.value = false;
-        showSnack(
-          'Not Found',
-          datum['message'] ?? 'No customer found',
-          bg: Colors.redAccent,
-        );
+        showTopSnack(datum['message'] ?? 'No customer found', isError: true);
       }
     } catch (e) {
       showSnack('Error', e.toString(), bg: Colors.redAccent);
@@ -49,7 +45,7 @@ class AssignPointController extends GetxController {
 
   Future<void> assignReward() async {
     if (!isCustomerLoaded.value) {
-      showSnack('Error', 'No customer selected', bg: Colors.redAccent);
+      showTopSnack('No customer selected', isError: true);
       return;
     }
     var shopkeeperId = getBox.read(USER_ID);
@@ -58,11 +54,7 @@ class AssignPointController extends GetxController {
     final star = starController.text.trim();
     final coin = coinController.text.trim();
     if (star.isEmpty && coin.isEmpty) {
-      showSnack(
-        'Error',
-        'Enter at least one reward value',
-        bg: Colors.redAccent,
-      );
+      showTopSnack('Enter at least one reward value', isError: true);
       return;
     }
 
@@ -81,10 +73,9 @@ class AssignPointController extends GetxController {
       var datam = res.data;
 
       if (datam['status'] == 200) {
-        showSnack(
-          'Success',
+        showTopSnack(
           datam['message'] ?? 'Reward sent successfully',
-          bg: Colors.green,
+          isError: false,
         );
 
         starController.clear();
@@ -93,21 +84,22 @@ class AssignPointController extends GetxController {
         proddescription.clear();
         searchController.clear();
       } else {
-        showSnack(
-          'Error',
+        showTopSnack(
           datam['message'] ?? 'Failed to assign reward',
-          bg: Colors.redAccent,
+          isError: true,
         );
       }
     } catch (e) {
-      showSnack('Error', e.toString(), bg: Colors.redAccent);
+      showTopSnack(e.toString(), isError: true);
     } finally {
       isLoading.value = false;
     }
   }
 
-  /// 📷 QR Scan handler
   void scanQr(String scannedCode) {
+    if (isScanned) return;
+
+    isScanned = true;
     searchController.text = scannedCode;
     searchCustomer();
   }
